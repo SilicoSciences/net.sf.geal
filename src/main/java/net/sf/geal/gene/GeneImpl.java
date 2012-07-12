@@ -1,6 +1,6 @@
 package net.sf.geal.gene;
 
-import net.sf.ga.mutator.gene.MutatorGene;
+import net.sf.geal.mutator.gene.MutatorGene;
 import net.sf.kerner.utils.impl.util.Util;
 
 public class GeneImpl<P> implements Gene<P> {

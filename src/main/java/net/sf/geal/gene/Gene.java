@@ -1,6 +1,6 @@
 package net.sf.geal.gene;
 
-import net.sf.ga.mutator.gene.MutatorGene;
+import net.sf.geal.mutator.gene.MutatorGene;
 
 public interface Gene<P> {
 

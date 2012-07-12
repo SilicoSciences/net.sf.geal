@@ -3,9 +3,9 @@ package net.sf.geal.genome;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.ga.ExceptionRuntimeGA;
-import net.sf.ga.mutator.gene.MutatorGeneBoolean;
+import net.sf.geal.ExceptionRuntimeGA;
 import net.sf.geal.gene.GeneBoolean;
+import net.sf.geal.mutator.gene.MutatorGeneBoolean;
 import net.sf.kerner.utils.collections.list.impl.ListUtil;
 
 public class GenomeBoolean extends GenomeAbstract<List<Boolean>, Boolean, GeneBoolean> {
