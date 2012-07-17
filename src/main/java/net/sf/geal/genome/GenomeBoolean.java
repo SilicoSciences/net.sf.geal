@@ -6,7 +6,7 @@ import java.util.List;
 import net.sf.geal.ExceptionRuntimeGA;
 import net.sf.geal.gene.GeneBoolean;
 import net.sf.geal.mutator.gene.MutatorGeneBoolean;
-import net.sf.kerner.utils.collections.list.impl.ListUtil;
+import net.sf.kerner.utils.collections.list.impl.UtilList;
 
 public class GenomeBoolean extends GenomeAbstract<List<Boolean>, Boolean, GeneBoolean> {
 
@@ -31,7 +31,7 @@ public class GenomeBoolean extends GenomeAbstract<List<Boolean>, Boolean, GeneBo
     }
 
     public List<Boolean> express() {
-        final List<Boolean> result = ListUtil.newList();
+        final List<Boolean> result = UtilList.newList();
         for (final GeneBoolean g : getGenes()) {
             result.add(g.express());
         }

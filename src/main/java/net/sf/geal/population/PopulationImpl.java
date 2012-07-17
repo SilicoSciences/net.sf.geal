@@ -14,7 +14,7 @@ import net.sf.geal.individual.ValidatorIndividual;
 import net.sf.kerner.utils.collections.Equalator;
 import net.sf.kerner.utils.collections.filter.FilterApplier;
 import net.sf.kerner.utils.collections.impl.filter.FilterApplierProto;
-import net.sf.kerner.utils.collections.list.impl.ListUtil;
+import net.sf.kerner.utils.collections.list.impl.UtilList;
 import net.sf.kerner.utils.impl.util.Util;
 
 public class PopulationImpl<R, P, G extends Gene<P>> implements Population<R, P, G> {
@@ -114,14 +114,14 @@ public class PopulationImpl<R, P, G extends Gene<P>> implements Population<R, P,
     }
 
     public synchronized Population<R, P, G> getSubPopulation(final int size) {
-        if (size >= getSize()) {
-            return clone();
-        }
         if (size < 1) {
             throw new IllegalArgumentException("invalid size " + size);
         }
-        List<Individual<R, P, G>> result = ListUtil.newList(getIndividuals());
+        List<Individual<R, P, G>> result = UtilList.newList(getIndividuals());
         Collections.sort(result);
+        if (size >= result.size()) {
+            return new PopulationImpl<R, P, G>(result).clone();
+        }
         result = result.subList(0, size);
         return new PopulationImpl<R, P, G>(result).clone();
     }

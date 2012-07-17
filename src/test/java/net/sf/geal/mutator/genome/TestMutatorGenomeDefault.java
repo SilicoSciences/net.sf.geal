@@ -9,7 +9,7 @@ import net.sf.geal.genome.Genome;
 import net.sf.geal.genome.GenomeBoolean;
 import net.sf.geal.mutator.gene.MutatorGeneBooleanTrue;
 import net.sf.geal.mutator.genome.MutatorGenomeDefault;
-import net.sf.kerner.utils.collections.list.impl.ListUtil;
+import net.sf.kerner.utils.collections.list.impl.UtilList;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,7 +44,7 @@ public class TestMutatorGenomeDefault {
     @Test
     public final void testMutate01() {
         mutator.setFrequency(1);
-        final List genes = ListUtil.newList();
+        final List genes = UtilList.newList();
         GeneBoolean g = new GeneBoolean(false);
         g.setMutator(new MutatorGeneBooleanTrue());
         genes.add(g);

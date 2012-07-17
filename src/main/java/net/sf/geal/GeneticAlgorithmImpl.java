@@ -12,7 +12,7 @@ import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.IndividualPair;
 import net.sf.geal.population.Population;
 import net.sf.kerner.utils.collections.impl.UtilCollection;
-import net.sf.kerner.utils.collections.list.impl.ListUtil;
+import net.sf.kerner.utils.collections.list.impl.UtilList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +21,15 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>> implements GeneticAlg
 
     private static final Logger log = LoggerFactory.getLogger(GeneticAlgorithmImpl.class);
 
-    public final static double DEFAULT_PERCENTAGE_OF_PAIRINGS = 0.5;
+    public final static double DEFAULT_PERCENTAGE_OF_PAIRINGS = 0.1;
 
     public final static int DEFAULT_MAX_POPULATION_SIZE = 1000;
 
-    private final List<Population<R, P, G>> history = ListUtil.newList();
+    private final List<Population<R, P, G>> history = UtilList.newList();
 
-    private final List<ListenerEvolution<R, P, G>> listeners = ListUtil.newList();
+    private final List<ListenerEvolution<R, P, G>> listeners = UtilList.newList();
 
-    private final List<TerminatorEvolution<R, P, G>> terminators = ListUtil.newList();
+    private final List<TerminatorEvolution<R, P, G>> terminators = UtilList.newList();
 
     private volatile FactoryIndividual<R, P, G> factoryIndividual;
 
@@ -104,7 +104,8 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>> implements GeneticAlg
             history.add(getCurrentPopulation().clone());
             currentPopulation = evolve(getCurrentPopulation());
             if (log.isInfoEnabled()) {
-                log.info("got new population " + UtilCollection.toString(getCurrentPopulation()));
+                log.info("got new population "
+                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(getMaxPopulationSize())));
             }
             for (final ListenerEvolution<R, P, G> l : listeners) {
                 l.newPopulation(currentPopulation);
@@ -139,7 +140,10 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>> implements GeneticAlg
 
         if (population.getSize() > 2) {
 
-            final int breedingPopulationSize = (int) (population.getSize() * getPercentageOfPairings());
+            int breedingPopulationSize = (int) (population.getSize() * getPercentageOfPairings());
+            if (breedingPopulationSize < 2) {
+                breedingPopulationSize = 2;
+            }
 
             breedingIndividuals = population.getSubPopulation(breedingPopulationSize).getIndividuals();
 
@@ -147,7 +151,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>> implements GeneticAlg
             // log.debug("new individual size: " + breedingIndividuals.size());
             // }
         } else {
-            breedingIndividuals = new ArrayList(population.clone().getIndividuals());
+            breedingIndividuals = new ArrayList<Individual<R, P, G>>(population.clone().getIndividuals());
         }
 
         boolean success = false;

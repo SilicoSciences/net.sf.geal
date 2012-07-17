@@ -25,6 +25,18 @@ public class FactoryIndividualDefault<R, P, G extends Gene<P>> implements Factor
 
     private FitnessCalculator<R, P, G> fitnessCalculator;
 
+    public FactoryIndividualDefault(final List<MutatorGenome<R, P, G>> mutators,
+            final List<CrossOverGenome<R, P, G>> crossOvers, final FitnessCalculator<R, P, G> fitnessCalculator) {
+
+        this.mutators = mutators;
+        this.crossOvers = crossOvers;
+        this.fitnessCalculator = fitnessCalculator;
+    }
+
+    public FactoryIndividualDefault() {
+
+    }
+
     public Collection<Individual<R, P, G>> breed(final IndividualPair<R, P, G> pair) {
 
         if (getCrossOvers() == null) {

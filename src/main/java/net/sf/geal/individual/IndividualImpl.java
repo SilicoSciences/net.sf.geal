@@ -19,7 +19,7 @@ public class IndividualImpl<R, P, G extends Gene<P>> implements Individual<R, P,
 
     private final FitnessCalculator<R, P, G> fitnessCalculator;
 
-    private volatile transient double fitness = -2;
+    private volatile double fitnessCache = 0;
 
     private volatile Population<R, P, G> population;
 
@@ -28,56 +28,82 @@ public class IndividualImpl<R, P, G extends Gene<P>> implements Individual<R, P,
         this.genome = genome;
         this.generation = generation;
         this.fitnessCalculator = fitnessCalculator;
+
     }
 
     public IndividualImpl(final Genome<R, P, G> genome, final FitnessCalculator<R, P, G> fitnessCalculator) {
         this(0, genome, fitnessCalculator);
     }
 
-    public Genome<R, P, G> getGenome() {
+    protected IndividualImpl(final int generation, final Genome<R, P, G> genome,
+            final FitnessCalculator<R, P, G> fitnessCalculator, final double fitness) {
+        this(0, genome, fitnessCalculator);
+        this.fitnessCache = fitness;
+    }
+
+    private void init() {
+
+        if (fitnessCache != 0 && log.isWarnEnabled()) {
+            log.warn("overwriting fitness " + fitnessCache);
+        }
+
+        if (log.isInfoEnabled()) {
+            log.info("calculating fitness for " + getGenome());
+        }
+        fitnessCache = fitnessCalculator.getFitness(this);
+        if (log.isInfoEnabled()) {
+            log.info("got fitness " + fitnessCache + " for " + getGenome());
+        }
+
+    }
+
+    public synchronized Genome<R, P, G> getGenome() {
         return genome;
     }
 
-    public int getGeneration() {
+    public synchronized int getGeneration() {
         return generation;
     }
 
-    public void setGenome(final Genome<R, P, G> genome) {
+    public synchronized void setGenome(final Genome<R, P, G> genome) {
         this.genome = genome;
     }
 
-    public Population<R, P, G> getPopulation() {
+    public synchronized Population<R, P, G> getPopulation() {
         return population;
     }
 
-    public void setPopulation(final Population<R, P, G> population) {
+    public synchronized void setPopulation(final Population<R, P, G> population) {
         this.population = population;
+        if (fitnessCache == 0) {
+            init();
+        }
     }
 
-    public double getFitness() {
-        if (fitness == -2) {
-            fitness = fitnessCalculator.getFitness(this);
-            if (log.isInfoEnabled()) {
-                log.info("got a fitness: " + fitness + ":" + getGenome());
+    public synchronized double getFitness() {
+
+        if (fitnessCache == 0) {
+            init();
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("return cached fitness: " + fitnessCache + ":" + getGenome());
             }
         }
-        if (log.isInfoEnabled()) {
-            log.info("return cached fitness: " + fitness + ":" + getGenome());
-        }
-        return fitness;
+        return fitnessCache;
     }
 
     public int compareTo(final Individual<R, P, G> o) {
+        // must not be synchronized
         return fitnessCalculator.compare(this, o);
     }
 
     @Override
-    public String toString() {
-        return getGeneration() + ":" + getGenome().toString();
+    public synchronized String toString() {
+        return getGeneration() + ":" + getFitness() + ":" + getGenome().toString();
     }
 
     @Override
-    public int hashCode() {
+    public synchronized int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getGenome() == null) ? 0 : getGenome().hashCode());
@@ -85,14 +111,14 @@ public class IndividualImpl<R, P, G extends Gene<P>> implements Individual<R, P,
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public synchronized boolean equals(final Object obj) {
         return Util.equalsOnHashCode(this, obj);
     }
 
     @Override
-    public IndividualImpl<R, P, G> clone() {
+    public synchronized IndividualImpl<R, P, G> clone() {
 
-        return new IndividualImpl<R, P, G>(getGeneration(), getGenome().clone(), fitnessCalculator);
+        return new IndividualImpl<R, P, G>(getGeneration(), getGenome().clone(), fitnessCalculator, getFitness());
 
     }
 

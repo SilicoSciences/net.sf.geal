@@ -4,12 +4,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.geal.gene.Gene;
-import net.sf.kerner.utils.collections.list.impl.ListUtil;
+import net.sf.kerner.utils.collections.list.impl.UtilList;
 import net.sf.kerner.utils.impl.util.Util;
 
 public abstract class GenomeAbstract<R, P, G extends Gene<P>> implements Genome<R, P, G> {
 
-    private List<G> genes = ListUtil.newList();
+    private List<G> genes = UtilList.newList();
 
     @Override
     public synchronized String toString() {

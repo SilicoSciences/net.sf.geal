@@ -6,7 +6,7 @@ import net.sf.geal.gene.Gene;
 import net.sf.geal.genome.Genome;
 import net.sf.geal.genome.GenomePair;
 import net.sf.geal.mutator.MutatorAbstract;
-import net.sf.kerner.utils.collections.list.impl.ListUtil;
+import net.sf.kerner.utils.collections.list.impl.UtilList;
 import net.sf.kerner.utils.math.MathUtils;
 import net.sf.kerner.utils.math.RandomFactory;
 
@@ -53,11 +53,11 @@ public class CrossOverGenomeDefault<R, P, G extends Gene<P>> extends MutatorAbst
         // log.debug("crossover at " + startIndex + "-" + stopIndex);
         // }
 
-        final List<G> subList1 = ListUtil.newList(result1.getGenes().subList(startIndex, stopIndex));
-        final List<G> subList2 = ListUtil.newList(result2.getGenes().subList(startIndex, stopIndex));
+        final List<G> subList1 = UtilList.newList(result1.getGenes().subList(startIndex, stopIndex));
+        final List<G> subList2 = UtilList.newList(result2.getGenes().subList(startIndex, stopIndex));
 
-        ListUtil.setAll(result1.getGenes(), subList2, startIndex);
-        ListUtil.setAll(result2.getGenes(), subList1, startIndex);
+        UtilList.setAll(result1.getGenes(), subList2, startIndex);
+        UtilList.setAll(result2.getGenes(), subList1, startIndex);
 
         return new GenomePair<R, P, G>(result1, result2);
     }
