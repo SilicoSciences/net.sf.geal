@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.geal.FitnessCalculator;
 import net.sf.geal.gene.Gene;
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
@@ -113,6 +114,10 @@ public class PopulationImpl<R, P, G extends Gene<P>> implements Population<R, P,
         individuals = new LinkedHashSet<Individual<R, P, G>>(getIndividuals().subList(0, newSize));
     }
 
+    /**
+     * @return a new instance of {@code PopulationImpl}, which contains number of {@code size} individuals. <br>
+     *         Best ones first, sorting by {@link FitnessCalculator}.
+     */
     public synchronized Population<R, P, G> getSubPopulation(final int size) {
         if (size < 1) {
             throw new IllegalArgumentException("invalid size " + size);

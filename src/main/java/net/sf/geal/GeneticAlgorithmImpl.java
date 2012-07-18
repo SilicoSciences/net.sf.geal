@@ -156,6 +156,8 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>> implements GeneticAlg
 
         boolean success = false;
         while (breedingIndividuals.size() > 1 || success == false) {
+            // shuffle to pick randomly from choosen subpopulation
+            Collections.shuffle(breedingIndividuals);
             final Iterator<Individual<R, P, G>> it = breedingIndividuals.iterator();
             final IndividualPair<R, P, G> pair = new IndividualPair<R, P, G>(it.next(), it.next());
             final Collection<Individual<R, P, G>> newPair = getFactoryIndividual().breed(pair);
