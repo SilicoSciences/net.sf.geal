@@ -25,17 +25,11 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://git.code.sf.net/p/geal/code
+		<url>git://git.code.sf.net/p/geal/code
 		</url>
 		<connection>scm:git:git://git.code.sf.net/p/geal/code</connection>
 		<developerConnection>scm:git:ssh://akerner@git.code.sf.net/p/geal/code</developerConnection>
 	</scm>
-	<distributionManagement>
-		<site>
-			<id>sourceforge-kerner-utils-co</id>
-			<url>sftp://frs.sourceforge.net:/home/groups/g/geal/htdocs</url>
-		</site>
-	</distributionManagement>
 	<build>
 		<plugins>
 			<plugin>
