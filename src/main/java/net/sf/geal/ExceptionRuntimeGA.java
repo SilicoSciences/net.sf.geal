@@ -2,6 +2,8 @@ package net.sf.geal;
 
 public class ExceptionRuntimeGA extends RuntimeException {
 
+    private static final long serialVersionUID = 416314591337673304L;
+
     public ExceptionRuntimeGA() {
         super();
 

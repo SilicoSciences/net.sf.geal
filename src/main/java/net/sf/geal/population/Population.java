@@ -8,26 +8,26 @@ import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
 import net.sf.kerner.utils.collections.Equalator;
 
-public interface Population<R, P, G extends Gene<P>> extends Iterable<Individual<R, P, G>> {
+public interface Population<R, P, G extends Gene<P>, I extends Individual<R, P, G>> extends Iterable<I> {
 
-    boolean add(Individual<R, P, G> individual);
+    boolean add(I individual);
 
-    boolean addAll(Collection<? extends Individual<R, P, G>> individuals);
+    boolean addAll(Collection<? extends I> individuals);
 
-    void addValidator(ValidatorIndividual<R, P, G> validator);
+    void addValidator(ValidatorIndividual<R, P, G, I> validator);
 
-    List<Individual<R, P, G>> getIndividuals();
+    Population<R, P, G, I> clone();
 
-    Population<R, P, G> getSubPopulation(int size);
+    I find(I individual, Equalator<I> equalator);
 
-    void trim(int newSize);
+    I find(int hashCode);
+
+    List<I> getIndividuals();
 
     int getSize();
 
-    Population<R, P, G> clone();
+    Population<R, P, G, I> getSubPopulation(int size);
 
-    Individual<R, P, G> find(int hashCode);
-
-    Individual<R, P, G> find(Individual<R, P, G> individual, Equalator<Individual<R, P, G>> equalator);
+    void trim(int newSize);
 
 }

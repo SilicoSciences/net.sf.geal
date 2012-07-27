@@ -3,14 +3,14 @@ package net.sf.geal.individual;
 import net.sf.geal.ObjectPair;
 import net.sf.geal.gene.Gene;
 
-public class IndividualPair<R, P, G extends Gene<P>> extends ObjectPair<Individual<R, P, G>, Individual<R, P, G>> {
+public class IndividualPair<R, P, G extends Gene<P>, I extends Individual<R, P, G>> extends ObjectPair<I, I> {
 
     public IndividualPair() {
         super();
 
     }
 
-    public IndividualPair(final Individual<R, P, G> first, final Individual<R, P, G> second) {
+    public IndividualPair(final I first, final I second) {
         super(first, second);
 
     }

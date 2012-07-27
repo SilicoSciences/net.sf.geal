@@ -7,7 +7,7 @@ import net.sf.geal.genome.Genome;
 import net.sf.geal.genome.GenomePair;
 import net.sf.geal.mutator.MutatorAbstract;
 import net.sf.kerner.utils.collections.list.impl.UtilList;
-import net.sf.kerner.utils.math.MathUtils;
+import net.sf.kerner.utils.math.UtilMath;
 import net.sf.kerner.utils.math.RandomFactory;
 
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class CrossOverGenomeDefault<R, P, G extends Gene<P>> extends MutatorAbst
     }
 
     public GenomePair<R, P, G> cross(final GenomePair<R, P, G> genomes) {
-        final int smallestSize = (int) MathUtils.min(genomes.getFirst().getGenes().size(), genomes.getSecond()
+        final int smallestSize = (int) UtilMath.min(genomes.getFirst().getGenes().size(), genomes.getSecond()
                 .getGenes().size());
         final Genome<R, P, G> result1 = genomes.getFirst().clone();
         final Genome<R, P, G> result2 = genomes.getSecond().clone();

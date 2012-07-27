@@ -1,10 +1,12 @@
-package net.sf.geal.genome;
+package net.sf.geal.genome.impl;
 
 import java.util.Iterator;
 import java.util.List;
 
 import net.sf.geal.ExceptionRuntimeGA;
-import net.sf.geal.gene.GeneBoolean;
+import net.sf.geal.gene.impl.GeneBoolean;
+import net.sf.geal.genome.Genome;
+import net.sf.geal.genome.GenomeAbstract;
 import net.sf.geal.mutator.gene.MutatorGeneBoolean;
 import net.sf.kerner.utils.collections.list.impl.UtilList;
 

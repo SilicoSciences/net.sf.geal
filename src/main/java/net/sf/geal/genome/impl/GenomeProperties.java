@@ -1,10 +1,11 @@
-package net.sf.geal.genome;
+package net.sf.geal.genome.impl;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import net.sf.geal.gene.GeneProperties;
+import net.sf.geal.gene.impl.GeneProperties;
+import net.sf.geal.genome.GenomeAbstract;
 
 public class GenomeProperties extends GenomeAbstract<Properties, Object, GeneProperties> {
 

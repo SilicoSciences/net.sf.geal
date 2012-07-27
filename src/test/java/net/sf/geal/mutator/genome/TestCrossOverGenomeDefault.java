@@ -1,10 +1,10 @@
 package net.sf.geal.mutator.genome;
 
 import static org.junit.Assert.assertEquals;
-import net.sf.geal.gene.GeneBoolean;
+import net.sf.geal.gene.impl.GeneBoolean;
 import net.sf.geal.genome.Genome;
-import net.sf.geal.genome.GenomeBoolean;
 import net.sf.geal.genome.GenomePair;
+import net.sf.geal.genome.impl.GenomeBoolean;
 import net.sf.geal.mutator.genome.CrossOverGenomeDefault;
 
 import org.junit.After;

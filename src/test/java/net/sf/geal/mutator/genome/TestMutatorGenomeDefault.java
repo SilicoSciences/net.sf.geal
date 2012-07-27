@@ -4,9 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import net.sf.geal.gene.GeneBoolean;
+import net.sf.geal.gene.impl.GeneBoolean;
 import net.sf.geal.genome.Genome;
-import net.sf.geal.genome.GenomeBoolean;
+import net.sf.geal.genome.impl.GenomeBoolean;
 import net.sf.geal.mutator.gene.MutatorGeneBooleanTrue;
 import net.sf.geal.mutator.genome.MutatorGenomeDefault;
 import net.sf.kerner.utils.collections.list.impl.UtilList;

@@ -1,18 +1,11 @@
 package net.sf.geal.individual;
 
-import java.util.Collection;
-import java.util.List;
-
 import net.sf.geal.gene.Gene;
-import net.sf.geal.mutator.genome.CrossOverGenome;
-import net.sf.geal.mutator.genome.MutatorGenome;
+import net.sf.geal.genome.Genome;
+import net.sf.kerner.utils.Factory;
 
-public interface FactoryIndividual<R, P, G extends Gene<P>> {
+public interface FactoryIndividual<R, P, G extends Gene<P>, I extends Individual<R, P, G>> extends Factory<I> {
 
-    List<MutatorGenome<R, P, G>> getMutators();
-
-    List<CrossOverGenome<R, P, G>> getCrossOvers();
-
-    Collection<Individual<R, P, G>> breed(IndividualPair<R, P, G> pair);
+    public I create(final int generation, final Genome<R, P, G> genome);
 
 }
