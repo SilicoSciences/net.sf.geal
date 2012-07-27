@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.sf.geal</groupId>
   <artifactId>geal</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1-SNAPSHOT</version>
   <name>Genetic Algorithms</name>
   <properties>
 		<jdk.version>1.6</jdk.version>
