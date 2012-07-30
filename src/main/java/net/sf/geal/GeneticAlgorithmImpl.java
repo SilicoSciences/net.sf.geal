@@ -55,14 +55,17 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         addTerminator(terminatorPopulationSize);
     }
 
+    @Override
     public synchronized void addListener(final ListenerEvolution<R, P, G, I> listener) {
         this.listeners.add(listener);
     }
 
+    @Override
     public synchronized void addTerminator(final TerminatorEvolution<R, P, G, I> terminator) {
         terminators.add(terminator);
     }
 
+    @Override
     public synchronized void evolve() {
         if (getFactoryIndividual() == null) {
             throw new ExceptionRuntimeGA("set individual factory first");
@@ -72,8 +75,8 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
             history.add(getCurrentPopulation().clone());
             currentPopulation = evolve(getCurrentPopulation());
             if (log.isInfoEnabled()) {
-                log.info("got new population (top 50)"
-                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(50)));
+                log.info("got new population (top 20)"
+                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(20)));
             }
             for (final ListenerEvolution<R, P, G, I> l : listeners) {
                 l.newPopulation(currentPopulation);
@@ -108,14 +111,17 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         return population;
     }
 
+    @Override
     public synchronized Population<R, P, G, I> getCurrentPopulation() {
         return currentPopulation;
     }
 
+    @Override
     public synchronized IndividualBreeder<R, P, G, I> getFactoryIndividual() {
         return factoryIndividual;
     }
 
+    @Override
     public synchronized List<Population<R, P, G, I>> getHistory() {
         // TODO make copy, populations may still be altered
         return Collections.unmodifiableList(history);
@@ -125,6 +131,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         return terminatorPopulationSize.getMaxPopulationSize();
     }
 
+    @Override
     public synchronized double getPercentageOfPairings() {
         return percentageOfPairings;
     }
