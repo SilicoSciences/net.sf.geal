@@ -15,8 +15,6 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
 
     protected Future<Double> fitness = null;
 
-    protected double fitnessCache;
-
     private final int generation;
 
     private final Genome<R, P, G> genome;
@@ -31,9 +29,9 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
 
     }
 
-    protected IndividualAbstract(final int generation, final Genome<R, P, G> genome, final double fitness) {
+    protected IndividualAbstract(final int generation, final Genome<R, P, G> genome, final Future<Double> fitness) {
         this(0, genome);
-        this.fitnessCache = fitness;
+        this.fitness = fitness;
     }
 
     protected abstract void calculateFitness();
@@ -41,6 +39,7 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
     @Override
     public abstract IndividualAbstract<R, P, G> clone();
 
+    @Override
     public int compareTo(final Individual<R, P, G> o) {
         // bigger is better
         return Double.compare(o.getFitness(), this.getFitness());
@@ -51,31 +50,29 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
         return Util.equalsOnHashCode(this, obj);
     }
 
+    @Override
     public synchronized double getFitness() {
 
-        if (fitnessCache == 0) {
+        if (fitness == null) {
             calculateFitness();
-            try {
-                fitnessCache = fitness.get();
-            } catch (final Exception e) {
-                if (log.isErrorEnabled()) {
-                    log.error("failed to calculate fitness", e);
-                }
-            }
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("return cached fitness: " + fitnessCache + ":" + getGenome());
-            }
         }
-        return fitnessCache;
-
+        try {
+            return fitness.get();
+        } catch (final Exception e) {
+            if (log.isErrorEnabled()) {
+                log.error("failed to calculate fitness", e.getLocalizedMessage());
+            }
+            return -1;
+        }
     }
 
+    @Override
     public int getGeneration() {
         // generation final
         return generation;
     }
 
+    @Override
     public Genome<R, P, G> getGenome() {
         // genome final
         return genome;
@@ -96,7 +93,7 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
         // generation final
         // fitnessCache volatile
         // genome final
-        return generation + ":" + fitnessCache + ":" + genome.toString();
+        return generation + ":" + genome.toString();
     }
 
 }

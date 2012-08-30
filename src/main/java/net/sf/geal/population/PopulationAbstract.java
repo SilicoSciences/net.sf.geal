@@ -15,8 +15,13 @@ import net.sf.kerner.utils.collections.filter.FilterApplier;
 import net.sf.kerner.utils.collections.impl.filter.FilterApplierProto;
 import net.sf.kerner.utils.impl.util.Util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Individual<R, P, G>> implements
         Population<R, P, G, I> {
+
+    private static final Logger log = LoggerFactory.getLogger(PopulationAbstract.class);
 
     private final FilterApplier<I> filterApplier = new FilterApplierProto<I>();
 
@@ -34,14 +39,25 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
      * @return {@code false} if given {@code Individual} was rejected by any filter or was already contained by this
      *         {@code Population}; {@code true} otherwise
      */
+    @Override
     public synchronized boolean add(final I individual) {
         final boolean accept = filterApplier.filter(individual);
         if (accept) {
             final boolean ac = individuals.add(individual);
             if (ac) {
+                if (log.isDebugEnabled()) {
+                    log.debug("added " + individual);
+                }
                 individual.triggerCalculation();
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("rejected, alreday there " + individual);
+                }
             }
             return ac;
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("rejected by filters " + individual);
         }
         return false;
     }
@@ -50,6 +66,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
      * @return {@code false} if one of given individuals was rejected by any filter or was already contained by this
      *         {@code Population}; {@code true} otherwise
      */
+    @Override
     public synchronized boolean addAll(final Collection<? extends I> individuala) {
         boolean result = true;
         for (final I i : individuala) {
@@ -61,6 +78,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
         return result;
     }
 
+    @Override
     public synchronized void addValidator(final ValidatorIndividual<R, P, G, I> validator) {
         filterApplier.addFilter(validator);
     }
@@ -73,6 +91,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
         return Util.equalsOnHashCode(this, obj);
     }
 
+    @Override
     public synchronized I find(final I individual, final Equalator<I> equalator) {
         for (final I i : getIndividuals()) {
             if (equalator.areEqual(individual, i)) {
@@ -82,6 +101,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
         return null;
     }
 
+    @Override
     public synchronized I find(final int hashCode) {
         for (final I i : getIndividuals()) {
             if (i.hashCode() == hashCode) {
@@ -91,10 +111,12 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
         return null;
     }
 
+    @Override
     public synchronized List<I> getIndividuals() {
         return new ArrayList<I>(individuals);
     }
 
+    @Override
     public synchronized int getSize() {
         return getIndividuals().size();
     }
@@ -107,6 +129,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
         return result;
     }
 
+    @Override
     public synchronized Iterator<I> iterator() {
         return getIndividuals().iterator();
     }
@@ -116,6 +139,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
         return getIndividuals().toString();
     }
 
+    @Override
     public synchronized void trim(final int newSize) {
         if (getSize() < newSize) {
             return;
