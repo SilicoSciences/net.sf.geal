@@ -1,5 +1,6 @@
-package net.sf.geal;
+package net.sf.geal.terminator;
 
+import net.sf.geal.GeneticAlgorithm;
 import net.sf.geal.gene.Gene;
 import net.sf.geal.individual.Individual;
 

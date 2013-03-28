@@ -19,7 +19,8 @@ import net.sf.geal.individual.Individual;
 import net.sf.geal.mutator.gene.MutatorGene;
 
 /**
- * A distinct property that contributes to an {@link Individual individuals} fitness.
+ * A distinct property that contributes to an {@link Individual individuals}
+ * fitness.
  * <p>
  * <b>Example:</b><br>
  * </p>
@@ -39,7 +40,8 @@ public interface Gene<P> {
     /**
      * Duplicate this {@code Gene}.
      * 
-     * @return A new instance of {@code Gene} which holds a new instance of this {@code Gene}'s value.
+     * @return A new instance of {@code Gene} which holds a new instance of this
+     *         {@code Gene}'s value.
      */
     Gene<P> clone();
 
@@ -66,8 +68,8 @@ public interface Gene<P> {
     void impress(P property);
 
     /**
-     * Trigger mutation of this {@code Gene}. Mutation will be delegated typically to this {@code Gene}'s
-     * {@link MutatorGene}.
+     * Trigger mutation of this {@code Gene}. Mutation will be delegated
+     * typically to this {@code Gene}'s {@link MutatorGene}.
      */
     void mutate();
 

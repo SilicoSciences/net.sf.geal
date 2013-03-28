@@ -11,6 +11,8 @@ import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.IndividualBreeder;
 import net.sf.geal.individual.IndividualPair;
 import net.sf.geal.population.Population;
+import net.sf.geal.terminator.TerminatorEvolution;
+import net.sf.geal.terminator.TerminatorPopulationSize;
 import net.sf.kerner.utils.collections.impl.UtilCollection;
 import net.sf.kerner.utils.collections.list.impl.UtilList;
 
