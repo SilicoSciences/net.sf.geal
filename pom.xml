@@ -26,10 +26,10 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>git://git.code.sf.net/p/geal/code
-		</url>
-		<connection>scm:git:git://git.code.sf.net/p/geal/code</connection>
-		<developerConnection>scm:git:ssh://akerner@git.code.sf.net/p/geal/code</developerConnection>
+		<url>git://git.code.sf.net/p/geal/code</url>
+		<connection>scm:git://git.code.sf.net/p/geal/code</connection>
+		<developerConnection>scm:git:ssh://akerner@git.code.sf.net/p/geal/code </developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 	<distributionManagement>
 		<repository>
@@ -40,6 +40,11 @@
 			<id>hoste1-thirdparty</id>
 			<url>http://83.169.17.70:42004/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
+		<site>
+			<id>sourceforge-geal</id>
+			<url>scp://shell.sourceforge.net/home/project-web/geal/htdocs
+			</url>
+		</site>
 	</distributionManagement>
 	<build>
 		<plugins>
@@ -95,23 +100,19 @@
   	<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-  	<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.4</version>
-		</dependency>
+  
   	<dependency>
   		<groupId>net.sf.kerner-utils-collections</groupId>
   		<artifactId>kerner-utils-collections</artifactId>
-  		<version>0.18.0</version>
+  		<version>0.22.2</version>
   	</dependency>
   	<dependency>
   		<groupId>net.sf.jranges</groupId>
   		<artifactId>jranges</artifactId>
-  		<version>0.4.1</version>
+  		<version>0.4.9</version>
   	</dependency>
   </dependencies>
 </project>
