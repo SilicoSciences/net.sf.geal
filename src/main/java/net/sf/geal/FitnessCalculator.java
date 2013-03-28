@@ -1,10 +1,9 @@
 package net.sf.geal;
 
-import net.sf.geal.gene.Gene;
 import net.sf.geal.individual.Individual;
 
-public interface FitnessCalculator<R, P, G extends Gene<P>, I extends Individual<R, P, G>> {
+public interface FitnessCalculator {
 
-    double getFitness(I individual);
+    double getFitness(Individual individual);
 
 }

@@ -4,13 +4,13 @@ import java.util.List;
 
 import net.sf.geal.gene.Gene;
 
-public interface Genome<R, P, G extends Gene<P>> extends Iterable<G> {
+public interface Genome extends Iterable<Gene> {
 
-    R express();
+    Genome clone();
 
-    void impress(R result);
+    Object express();
 
-    Genome<R, P, G> clone();
+    List<Gene> getGenes();
 
-    List<G> getGenes();
+    void impress(Object result);
 }

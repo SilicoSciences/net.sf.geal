@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.geal.gene.Gene;
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.IndividualBreeder;
 import net.sf.geal.individual.IndividualPair;
@@ -19,8 +18,7 @@ import net.sf.kerner.utils.collections.list.impl.UtilList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<R, P, G>> implements
-        GeneticAlgorithm<R, P, G, I> {
+public class GeneticAlgorithmImpl implements GeneticAlgorithm {
 
     public final static int DEFAULT_GROW_MAX_RETRY = 200;
 
@@ -34,36 +32,36 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
 
     private volatile int currentGrowRetry = 0;
 
-    private volatile Population<R, P, G, I> currentPopulation;
+    private volatile Population currentPopulation;
 
-    private volatile IndividualBreeder<R, P, G, I> factoryIndividual;
+    private volatile IndividualBreeder factoryIndividual;
 
-    private final List<Population<R, P, G, I>> history = UtilList.newList();
+    private final List<Population> history = UtilList.newList();
 
-    private final List<ListenerEvolution<R, P, G, I>> listeners = UtilList.newList();
+    private final List<ListenerEvolution> listeners = UtilList.newList();
 
     private volatile int maxGrowRetry = DEFAULT_GROW_MAX_RETRY;
 
     private volatile double percentageOfPairings;
 
-    private final TerminatorPopulationSize<R, P, G, I> terminatorPopulationSize = new TerminatorPopulationSize<R, P, G, I>(
+    private final TerminatorPopulationSize terminatorPopulationSize = new TerminatorPopulationSize(
             DEFAULT_MAX_POPULATION_SIZE);
 
-    private final List<TerminatorEvolution<R, P, G, I>> terminators = UtilList.newList();
+    private final List<TerminatorEvolution> terminators = UtilList.newList();
 
-    public GeneticAlgorithmImpl(final Population<R, P, G, I> initPopulation) {
-        this.currentPopulation = initPopulation;
-        this.percentageOfPairings = DEFAULT_PERCENTAGE_OF_PAIRINGS;
+    public GeneticAlgorithmImpl(final Population initPopulation) {
+        currentPopulation = initPopulation;
+        percentageOfPairings = DEFAULT_PERCENTAGE_OF_PAIRINGS;
         addTerminator(terminatorPopulationSize);
     }
 
     @Override
-    public synchronized void addListener(final ListenerEvolution<R, P, G, I> listener) {
-        this.listeners.add(listener);
+    public synchronized void addListener(final ListenerEvolution listener) {
+        listeners.add(listener);
     }
 
     @Override
-    public synchronized void addTerminator(final TerminatorEvolution<R, P, G, I> terminator) {
+    public synchronized void addTerminator(final TerminatorEvolution terminator) {
         terminators.add(terminator);
     }
 
@@ -80,7 +78,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
                 log.info("got new population (top 20)"
                         + UtilCollection.toString(getCurrentPopulation().getSubPopulation(20)));
             }
-            for (final ListenerEvolution<R, P, G, I> l : listeners) {
+            for (final ListenerEvolution l : listeners) {
                 l.newPopulation(currentPopulation);
             }
             if (log.isInfoEnabled()) {
@@ -90,7 +88,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
                 log.debug("history " + UtilCollection.toString(history));
             }
 
-            for (final TerminatorEvolution<R, P, G, I> t : getTerminators()) {
+            for (final TerminatorEvolution t : getTerminators()) {
                 if (t.visit(this)) {
                     run = false;
                     if (log.isInfoEnabled()) {
@@ -105,7 +103,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         }
     }
 
-    private Population<R, P, G, I> evolve(final Population<R, P, G, I> population) {
+    private Population evolve(final Population population) {
 
         grow(population);
         trim(population);
@@ -114,17 +112,17 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
     }
 
     @Override
-    public synchronized Population<R, P, G, I> getCurrentPopulation() {
+    public synchronized Population getCurrentPopulation() {
         return currentPopulation;
     }
 
     @Override
-    public synchronized IndividualBreeder<R, P, G, I> getFactoryIndividual() {
+    public synchronized IndividualBreeder getFactoryIndividual() {
         return factoryIndividual;
     }
 
     @Override
-    public synchronized List<Population<R, P, G, I>> getHistory() {
+    public synchronized List<Population> getHistory() {
         // TODO make copy, populations may still be altered
         return Collections.unmodifiableList(history);
     }
@@ -138,19 +136,19 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         return percentageOfPairings;
     }
 
-    public synchronized Population<R, P, G, I> getPreviousPopulation() {
+    public synchronized Population getPreviousPopulation() {
         return getHistory().get(0);
     }
 
-    public synchronized List<TerminatorEvolution<R, P, G, I>> getTerminators() {
+    public synchronized List<TerminatorEvolution> getTerminators() {
         return terminators;
     }
 
-    private void grow(final Population<R, P, G, I> population) {
+    private void grow(final Population population) {
 
         final int oldSize = population.getSize();
 
-        List<I> breedingIndividuals;
+        List<Individual> breedingIndividuals;
 
         if (population.getSize() > 2) {
 
@@ -176,7 +174,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
             breedingIndividuals = population.getSubPopulation(breedingPopulationSize).getIndividuals();
 
         } else {
-            breedingIndividuals = new ArrayList<I>(population.clone().getIndividuals());
+            breedingIndividuals = new ArrayList<Individual>(population.clone().getIndividuals());
         }
 
         if (log.isInfoEnabled()) {
@@ -186,14 +184,14 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         // shuffle to pick randomly from choosen subpopulation
         Collections.shuffle(breedingIndividuals);
         while (breedingIndividuals.size() > 1) {
-            final Iterator<I> it = breedingIndividuals.iterator();
-            final I i1 = it.next();
+            final Iterator<Individual> it = breedingIndividuals.iterator();
+            final Individual i1 = it.next();
             it.remove();
-            final I i2 = it.next();
+            final Individual i2 = it.next();
             it.remove();
-            final IndividualPair<R, P, G, I> pair = new IndividualPair<R, P, G, I>(i1, i2);
-            final Collection<I> newPair = getFactoryIndividual().breed(pair);
-            for (final I ii : newPair) {
+            final IndividualPair pair = new IndividualPair(i1, i2);
+            final Collection<Individual> newPair = getFactoryIndividual().breed(pair);
+            for (final Individual ii : newPair) {
                 final boolean success = population.add(ii);
                 if (success) {
 
@@ -224,7 +222,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         }
     }
 
-    public synchronized void setFactoryIndividual(final IndividualBreeder<R, P, G, I> factoryIndividual) {
+    public synchronized void setFactoryIndividual(final IndividualBreeder factoryIndividual) {
         this.factoryIndividual = factoryIndividual;
     }
 
@@ -236,7 +234,7 @@ public class GeneticAlgorithmImpl<R, P, G extends Gene<P>, I extends Individual<
         this.percentageOfPairings = percentageOfPairings;
     }
 
-    private synchronized void trim(final Population<R, P, G, I> population) {
+    private synchronized void trim(final Population population) {
         if (population.getSize() < getMaxPopulationSize()) {
             return;
         }

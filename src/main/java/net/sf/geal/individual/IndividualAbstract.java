@@ -2,14 +2,13 @@ package net.sf.geal.individual;
 
 import java.util.concurrent.Future;
 
-import net.sf.geal.gene.Gene;
 import net.sf.geal.genome.Genome;
 import net.sf.kerner.utils.impl.util.Util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Individual<R, P, G> {
+public abstract class IndividualAbstract implements Individual {
 
     private static final Logger log = LoggerFactory.getLogger(IndividualAbstract.class);
 
@@ -17,19 +16,19 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
 
     private final int generation;
 
-    private final Genome<R, P, G> genome;
+    private final Genome genome;
 
-    public IndividualAbstract(final Genome<R, P, G> genome) {
+    public IndividualAbstract(final Genome genome) {
         this(0, genome);
     }
 
-    public IndividualAbstract(final int generation, final Genome<R, P, G> genome) {
+    public IndividualAbstract(final int generation, final Genome genome) {
         this.genome = genome;
         this.generation = generation;
 
     }
 
-    protected IndividualAbstract(final int generation, final Genome<R, P, G> genome, final Future<Double> fitness) {
+    protected IndividualAbstract(final int generation, final Genome genome, final Future<Double> fitness) {
         this(0, genome);
         this.fitness = fitness;
     }
@@ -37,12 +36,12 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
     protected abstract void calculateFitness();
 
     @Override
-    public abstract IndividualAbstract<R, P, G> clone();
+    public abstract IndividualAbstract clone();
 
     @Override
-    public int compareTo(final Individual<R, P, G> o) {
+    public int compareTo(final Individual o) {
         // bigger is better
-        return Double.compare(o.getFitness(), this.getFitness());
+        return Double.compare(o.getFitness(), getFitness());
     }
 
     @Override
@@ -73,7 +72,7 @@ public abstract class IndividualAbstract<R, P, G extends Gene<P>> implements Ind
     }
 
     @Override
-    public Genome<R, P, G> getGenome() {
+    public Genome getGenome() {
         // genome final
         return genome;
     }

@@ -2,9 +2,10 @@ package net.sf.geal.mutator.gene;
 
 import net.sf.kerner.utils.math.RandomFactory;
 
-public class MutatorGeneBoolean implements MutatorGene<Boolean> {
+public class MutatorGeneBoolean implements MutatorGene {
 
-    public Boolean mutate(final Boolean oldValue) {
+    @Override
+    public Boolean mutate(final Object oldValue) {
         return RandomFactory.generate();
     }
 

@@ -1,16 +1,15 @@
 package net.sf.geal.individual;
 
-import net.sf.geal.ObjectPair;
-import net.sf.geal.gene.Gene;
+import net.sf.kerner.utils.ObjectPairSame;
 
-public class IndividualPair<R, P, G extends Gene<P>, I extends Individual<R, P, G>> extends ObjectPair<I, I> {
+public class IndividualPair extends ObjectPairSame<Individual> {
 
     public IndividualPair() {
         super();
 
     }
 
-    public IndividualPair(final I first, final I second) {
+    public IndividualPair(final Individual first, final Individual second) {
         super(first, second);
 
     }

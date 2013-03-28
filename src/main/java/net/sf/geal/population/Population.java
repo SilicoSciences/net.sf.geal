@@ -3,30 +3,29 @@ package net.sf.geal.population;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.geal.gene.Gene;
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
 import net.sf.kerner.utils.collections.Equalator;
 
-public interface Population<R, P, G extends Gene<P>, I extends Individual<R, P, G>> extends Iterable<I> {
+public interface Population extends Iterable<Individual> {
 
-    boolean add(I individual);
+    boolean add(Individual individual);
 
-    boolean addAll(Collection<? extends I> individuals);
+    boolean addAll(Collection<? extends Individual> individuals);
 
-    void addValidator(ValidatorIndividual<R, P, G, I> validator);
+    void addValidator(ValidatorIndividual validator);
 
-    Population<R, P, G, I> clone();
+    Population clone();
 
-    I find(I individual, Equalator<I> equalator);
+    Individual find(Individual individual, Equalator<Individual> equalator);
 
-    I find(int hashCode);
+    Individual find(int hashCode);
 
-    List<I> getIndividuals();
+    List<Individual> getIndividuals();
 
     int getSize();
 
-    Population<R, P, G, I> getSubPopulation(int size);
+    Population getSubPopulation(int size);
 
     void trim(int newSize);
 
