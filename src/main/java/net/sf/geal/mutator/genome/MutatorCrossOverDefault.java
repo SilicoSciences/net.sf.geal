@@ -7,10 +7,10 @@ import net.sf.geal.genome.Genome;
 import net.sf.geal.genome.GenomePair;
 import net.sf.geal.mutator.MutatorAbstract;
 import net.sf.kerner.utils.collections.list.impl.UtilList;
-import net.sf.kerner.utils.math.RandomFactory;
 import net.sf.kerner.utils.math.UtilMath;
+import net.sf.kerner.utils.math.UtilRandom;
 
-public class CrossOverGenomeDefault extends MutatorAbstract implements CrossOverGenome {
+public class MutatorCrossOverDefault extends MutatorAbstract implements MutatorCrossOver {
 
     // private static final Logger log =
     // LoggerFactory.getLogger(CrossOverGenomeDefault.class);
@@ -22,18 +22,18 @@ public class CrossOverGenomeDefault extends MutatorAbstract implements CrossOver
 
     private boolean indicesRandom = true;
 
-    public CrossOverGenomeDefault() {
+    public MutatorCrossOverDefault() {
         super(DEFAULT_FREQUENCY);
     }
 
-    public CrossOverGenomeDefault(final double frequency) {
+    public MutatorCrossOverDefault(final double frequency) {
         super(frequency);
     }
 
     @Override
     public GenomePair cross(final GenomePair genomes) {
-        final int smallestSize = (int) UtilMath.min(genomes.getFirst().getGenes().size(), genomes.getSecond()
-                .getGenes().size());
+        final int smallestSize = (int) UtilMath.min(genomes.getFirst().getGenes().size(), genomes
+                .getSecond().getGenes().size());
         final Genome result1 = genomes.getFirst().clone();
         final Genome result2 = genomes.getSecond().clone();
 
@@ -42,17 +42,19 @@ public class CrossOverGenomeDefault extends MutatorAbstract implements CrossOver
         // }
 
         if (indicesRandom) {
-            startIndex = RandomFactory.generateBetween(0, smallestSize - 1);
+            startIndex = UtilRandom.generateBetween(0, smallestSize - 1);
         }
         if (indicesRandom) {
-            stopIndex = RandomFactory.generateBetween(startIndex, smallestSize - 1);
+            stopIndex = UtilRandom.generateBetween(startIndex, smallestSize - 1);
         }
         // if (log.isDebugEnabled()) {
         // log.debug("crossover at " + startIndex + "-" + stopIndex);
         // }
 
-        final List<Gene> subList1 = UtilList.newList(result1.getGenes().subList(startIndex, stopIndex));
-        final List<Gene> subList2 = UtilList.newList(result2.getGenes().subList(startIndex, stopIndex));
+        final List<Gene> subList1 = UtilList.newList(result1.getGenes().subList(startIndex,
+                stopIndex));
+        final List<Gene> subList2 = UtilList.newList(result2.getGenes().subList(startIndex,
+                stopIndex));
 
         UtilList.setAll(result1.getGenes(), subList2, startIndex);
         UtilList.setAll(result2.getGenes(), subList1, startIndex);

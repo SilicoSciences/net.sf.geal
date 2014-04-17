@@ -2,6 +2,7 @@ package net.sf.geal.population;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -9,10 +10,9 @@ import java.util.Set;
 
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
-import net.sf.kerner.utils.collections.Equalator;
 import net.sf.kerner.utils.collections.filter.FilterApplier;
-import net.sf.kerner.utils.collections.impl.filter.FilterApplierProto;
-import net.sf.kerner.utils.impl.util.Util;
+import net.sf.kerner.utils.collections.filter.impl.FilterApplierProto;
+import net.sf.kerner.utils.equal.Equalator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,12 +87,8 @@ public abstract class PopulationAbstract implements Population {
     public abstract PopulationAbstract clone();
 
     @Override
-    public synchronized boolean equals(final Object obj) {
-        return Util.equalsOnHashCode(this, obj);
-    }
-
-    @Override
-    public synchronized Individual find(final Individual individual, final Equalator<Individual> equalator) {
+    public synchronized Individual find(final Individual individual,
+            final Equalator<Individual> equalator) {
         for (final Individual i : getIndividuals()) {
             if (equalator.areEqual(individual, i)) {
                 return i;
@@ -113,20 +109,14 @@ public abstract class PopulationAbstract implements Population {
 
     @Override
     public synchronized List<Individual> getIndividuals() {
-        return new ArrayList<Individual>(individuals);
+        final List<Individual> result = new ArrayList<Individual>(individuals);
+        Collections.sort(result);
+        return result;
     }
 
     @Override
     public synchronized int getSize() {
         return getIndividuals().size();
-    }
-
-    @Override
-    public synchronized int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getIndividuals() == null) ? 0 : getIndividuals().hashCode());
-        return result;
     }
 
     @Override

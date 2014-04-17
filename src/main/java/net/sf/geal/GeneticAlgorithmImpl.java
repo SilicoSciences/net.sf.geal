@@ -11,8 +11,9 @@ import net.sf.geal.individual.IndividualBreeder;
 import net.sf.geal.individual.IndividualPair;
 import net.sf.geal.population.Population;
 import net.sf.geal.terminator.TerminatorEvolution;
+import net.sf.geal.terminator.TerminatorGenerations;
 import net.sf.geal.terminator.TerminatorPopulationSize;
-import net.sf.kerner.utils.collections.impl.UtilCollection;
+import net.sf.kerner.utils.collections.UtilCollection;
 import net.sf.kerner.utils.collections.list.impl.UtilList;
 
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
     public final static int DEFAULT_MAX_OF_PAIRINGS = 20;
 
     public final static int DEFAULT_MAX_POPULATION_SIZE = 10000;
+
+    public final static int DEFAULT_MAX_GENERATIONS = 10000;
 
     public final static double DEFAULT_PERCENTAGE_OF_PAIRINGS = 0.1;
 
@@ -47,12 +50,16 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
     private final TerminatorPopulationSize terminatorPopulationSize = new TerminatorPopulationSize(
             DEFAULT_MAX_POPULATION_SIZE);
 
+    private final TerminatorGenerations terminatorGenerations = new TerminatorGenerations(
+            DEFAULT_MAX_GENERATIONS);
+
     private final List<TerminatorEvolution> terminators = UtilList.newList();
 
     public GeneticAlgorithmImpl(final Population initPopulation) {
         currentPopulation = initPopulation;
         percentageOfPairings = DEFAULT_PERCENTAGE_OF_PAIRINGS;
         addTerminator(terminatorPopulationSize);
+        addTerminator(terminatorGenerations);
     }
 
     @Override
@@ -67,22 +74,31 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
 
     @Override
     public synchronized void evolve() {
-        if (getFactoryIndividual() == null) {
+        if (getIndividualBreeder() == null) {
             throw new ExceptionRuntimeGA("set individual factory first");
+        }
+        if (getCurrentPopulation() == null || getCurrentPopulation().getIndividuals().isEmpty()) {
+            throw new ExceptionRuntimeGA("invalid population");
         }
         boolean run = true;
         while (run) {
+
             history.add(getCurrentPopulation().clone());
             currentPopulation = evolve(getCurrentPopulation());
             if (log.isInfoEnabled()) {
-                log.info("got new population (top 20)"
-                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(20)));
+                log.info("got new population (top 10)"
+                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(10)));
+                // for (final Individual g :
+                // getCurrentPopulation().getSubPopulation(10)) {
+                // log.info(g.getGenome().getProperties().toString());
+                // }
             }
             for (final ListenerEvolution l : listeners) {
                 l.newPopulation(currentPopulation);
             }
             if (log.isInfoEnabled()) {
-                log.info("generations passed " + history.size());
+                log.info("generations passed " + history.size() + ", population size: "
+                        + currentPopulation.getSize());
             }
             if (log.isDebugEnabled()) {
                 log.debug("history " + UtilCollection.toString(history));
@@ -117,14 +133,14 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
     }
 
     @Override
-    public synchronized IndividualBreeder getFactoryIndividual() {
-        return factoryIndividual;
-    }
-
-    @Override
     public synchronized List<Population> getHistory() {
         // TODO make copy, populations may still be altered
         return Collections.unmodifiableList(history);
+    }
+
+    @Override
+    public synchronized IndividualBreeder getIndividualBreeder() {
+        return factoryIndividual;
     }
 
     public synchronized int getMaxPopulationSize() {
@@ -158,8 +174,8 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
             }
             if (breedingPopulationSize > DEFAULT_MAX_OF_PAIRINGS) {
                 if (log.isDebugEnabled()) {
-                    log.debug("high number of breeding individuals (" + breedingPopulationSize + "), decrease to "
-                            + DEFAULT_MAX_OF_PAIRINGS);
+                    log.debug("high number of breeding individuals (" + breedingPopulationSize
+                            + "), decrease to " + DEFAULT_MAX_OF_PAIRINGS);
                 }
                 breedingPopulationSize = DEFAULT_MAX_OF_PAIRINGS;
 
@@ -167,18 +183,20 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
             if (breedingPopulationSize % 2 != 0) {
                 breedingPopulationSize++;
                 if (log.isDebugEnabled()) {
-                    log.debug("odd number of breeding individuals, increase to " + breedingPopulationSize);
+                    log.debug("odd number of breeding individuals, increase to "
+                            + breedingPopulationSize);
                 }
             }
 
-            breedingIndividuals = population.getSubPopulation(breedingPopulationSize).getIndividuals();
+            breedingIndividuals = population.getSubPopulation(breedingPopulationSize)
+                    .getIndividuals();
 
         } else {
             breedingIndividuals = new ArrayList<Individual>(population.clone().getIndividuals());
         }
 
-        if (log.isInfoEnabled()) {
-            log.info("growing population with " + breedingIndividuals.size() + " individuals");
+        if (log.isDebugEnabled()) {
+            log.debug("growing population with " + breedingIndividuals.size() + " individuals");
         }
 
         // shuffle to pick randomly from choosen subpopulation
@@ -190,7 +208,7 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
             final Individual i2 = it.next();
             it.remove();
             final IndividualPair pair = new IndividualPair(i1, i2);
-            final Collection<Individual> newPair = getFactoryIndividual().breed(pair);
+            final Collection<Individual> newPair = getIndividualBreeder().breed(pair);
             for (final Individual ii : newPair) {
                 final boolean success = population.add(ii);
                 if (success) {
@@ -204,8 +222,8 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
         }
 
         if (oldSize == population.getSize() && currentGrowRetry <= maxGrowRetry) {
-            if (log.isInfoEnabled()) {
-                log.info("failed to grow, try again");
+            if (log.isDebugEnabled()) {
+                log.debug("failed to grow, try again");
             }
             currentGrowRetry++;
             grow(population);
@@ -215,14 +233,14 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
             }
             currentGrowRetry = 0;
         } else {
-            if (log.isInfoEnabled()) {
-                log.info("done growing, new pop. size: " + population.getSize());
+            if (log.isDebugEnabled()) {
+                log.debug("done growing, new pop. size: " + population.getSize());
             }
             currentGrowRetry = 0;
         }
     }
 
-    public synchronized void setFactoryIndividual(final IndividualBreeder factoryIndividual) {
+    public synchronized void setIndividualBreeder(final IndividualBreeder factoryIndividual) {
         this.factoryIndividual = factoryIndividual;
     }
 

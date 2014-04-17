@@ -1,13 +1,13 @@
 package net.sf.geal.gene;
 
+import net.sf.geal.ExceptionRuntimeGA;
 import net.sf.geal.mutator.gene.MutatorGene;
-import net.sf.kerner.utils.impl.util.Util;
 
 public class GeneImpl implements Gene {
 
-    private volatile MutatorGene mutator;
+    protected volatile MutatorGene mutator;
 
-    private volatile Object value;
+    protected volatile Object value;
 
     public GeneImpl(final Gene template) {
         value = template.express();
@@ -24,8 +24,21 @@ public class GeneImpl implements Gene {
     }
 
     @Override
-    public synchronized boolean equals(final Object obj) {
-        return Util.equalsOnHashCode(this, obj);
+    public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof GeneImpl))
+            return false;
+        final GeneImpl other = (GeneImpl) obj;
+        if (value == null) {
+            if (other.value != null)
+                return false;
+        } else if (!value.equals(other.value))
+            return false;
+        return true;
+        // return super.equals(obj);
     }
 
     @Override
@@ -39,12 +52,13 @@ public class GeneImpl implements Gene {
     }
 
     @Override
-    public synchronized int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((value == null) ? 0 : value.hashCode());
         return result;
-    };
+        // return super.hashCode();
+    }
 
     @Override
     public synchronized void impress(final Object property) {
@@ -53,6 +67,9 @@ public class GeneImpl implements Gene {
 
     @Override
     public synchronized void mutate() {
+        if (mutator == null) {
+            throw new ExceptionRuntimeGA("set mutator first");
+        }
         impress(getMutator().mutate(express()));
     }
 
@@ -62,7 +79,7 @@ public class GeneImpl implements Gene {
 
     @Override
     public String toString() {
-        return value.toString();
+        return getClass().getSimpleName() + "=" + value.toString();
     }
 
 }

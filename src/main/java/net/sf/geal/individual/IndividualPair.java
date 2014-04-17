@@ -1,8 +1,8 @@
 package net.sf.geal.individual;
 
-import net.sf.kerner.utils.ObjectPairSame;
+import net.sf.kerner.utils.pair.ObjectPairSameImpl;
 
-public class IndividualPair extends ObjectPairSame<Individual> {
+public class IndividualPair extends ObjectPairSameImpl<Individual> {
 
     public IndividualPair() {
         super();

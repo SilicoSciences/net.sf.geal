@@ -1,6 +1,7 @@
 package net.sf.geal.genome;
 
 import java.util.List;
+import java.util.Properties;
 
 import net.sf.geal.gene.Gene;
 
@@ -12,5 +13,9 @@ public interface Genome extends Iterable<Gene> {
 
     List<Gene> getGenes();
 
+    Properties getProperties();
+
     void impress(Object result);
+
+    void setProperties(Properties properties);
 }

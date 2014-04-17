@@ -2,17 +2,17 @@ package net.sf.geal.mutator.genome;
 
 import net.sf.geal.genome.Genome;
 import net.sf.geal.mutator.MutatorAbstract;
-import net.sf.kerner.utils.math.RandomFactory;
+import net.sf.kerner.utils.math.UtilRandom;
 
-public class MutatorGenomeDefault extends MutatorAbstract implements MutatorGenome {
+public class MutatorPointDefault extends MutatorAbstract implements MutatorPoint {
 
     public final static double DEFAULT_FREQUENCY = 0.1;
 
-    public MutatorGenomeDefault() {
+    public MutatorPointDefault() {
         super(DEFAULT_FREQUENCY);
     }
 
-    public MutatorGenomeDefault(final double frequency) {
+    public MutatorPointDefault(final double frequency) {
         super(frequency);
     }
 
@@ -21,7 +21,7 @@ public class MutatorGenomeDefault extends MutatorAbstract implements MutatorGeno
         final Genome result = genome.clone();
 
         for (int i = 0; i < genome.getGenes().size(); i++) {
-            if (RandomFactory.generateWithProbability(getFrequency())) {
+            if (UtilRandom.generateWithProbability(getFrequency())) {
                 result.getGenes().get(i).mutate();
             }
         }

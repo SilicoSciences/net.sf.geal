@@ -16,59 +16,62 @@ limitations under the License.
 package net.sf.geal.gene;
 
 import net.sf.geal.individual.Individual;
+import net.sf.geal.mutator.Mutator;
 import net.sf.geal.mutator.gene.MutatorGene;
+import net.sf.kerner.utils.Cloneable;
 
 /**
- * 
+ *
  * A distinct property that contributes to an {@link Individual individuals}
  * fitness.
- * 
+ *
  * <p>
  * <b>Example:</b><br>
- * 
+ *
  * </p>
  * <p>
- * 
+ *
  * <pre>
  * TODO example
  * </pre>
- * 
+ *
  * </p>
  * <p>
  * last reviewed: 2013-03-28
  * </p>
- * 
+ *
  * @author <a href="mailto:alexanderkerner24@gmail.com">Alexander Kerner</a>
  * @version 2013-03-28
- * 
+ *
  */
-public interface Gene {
+public interface Gene extends Cloneable<Gene> {
 
     /**
      * Duplicate this {@code Gene}.
-     * 
+     *
      * @return A new instance of {@code Gene} which holds a new instance of this
      *         {@code Gene}'s value.
      */
+    @Override
     Gene clone();
 
     /**
      * Get current value for this {@code Gene}.
-     * 
+     *
      * @return current value for this {@code Gene}
      */
     Object express();
 
     /**
      * Get this {@Gene}'s {@link Mutator}.
-     * 
+     *
      * @return this {@Gene}'s {@link Mutator}
      */
     MutatorGene getMutator();
 
     /**
      * Set current value for this {@code Gene}.
-     * 
+     *
      * @param property
      *            new value for this {@code Gene}
      */

@@ -32,14 +32,6 @@
 		<tag>HEAD</tag>
 	</scm>
 	<distributionManagement>
-		<repository>
-			<id>hoste1-public</id>
-			<url>http://83.169.17.70:42004/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>hoste1-thirdparty</id>
-			<url>http://83.169.17.70:42004/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
 		<site>
 			<id>sourceforge-geal</id>
 			<url>scp://shell.sourceforge.net/home/project-web/geal/htdocs
@@ -47,53 +39,7 @@
 		</site>
 	</distributionManagement>
 	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.3.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>install</goal>
-						</goals>
-						<configuration>
-							<createChecksum>true</createChecksum>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.8.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+	<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -107,8 +53,73 @@
 				</dependencies>
 			</plugin>
 			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>install</goal>
+						</goals>
+						<configuration>
+							<createChecksum>true</createChecksum>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>dist-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
 				<configuration>
 					<archive>
 						<manifestEntries>
@@ -121,7 +132,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
+		</build>
   <dependencies>
   	<dependency>
 			<groupId>junit</groupId>
@@ -133,7 +144,7 @@
   	<dependency>
   		<groupId>net.sf.kerner-utils-collections</groupId>
   		<artifactId>kerner-utils-collections</artifactId>
-  		<version>0.22.2</version>
+  		<version>0.25.0</version>
   	</dependency>
   	<dependency>
   		<groupId>net.sf.jranges</groupId>

@@ -16,7 +16,7 @@ public interface GeneticAlgorithm {
 
     Population getCurrentPopulation();
 
-    IndividualBreeder getFactoryIndividual();
+    IndividualBreeder getIndividualBreeder();
 
     List<Population> getHistory();
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
-import net.sf.kerner.utils.collections.Equalator;
+import net.sf.kerner.utils.equal.Equalator;
 
 public interface Population extends Iterable<Individual> {
 
