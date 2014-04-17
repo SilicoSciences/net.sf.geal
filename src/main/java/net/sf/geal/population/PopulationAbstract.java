@@ -2,45 +2,44 @@ package net.sf.geal.population;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.geal.gene.Gene;
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
-import net.sf.kerner.utils.collections.Equalator;
 import net.sf.kerner.utils.collections.filter.FilterApplier;
-import net.sf.kerner.utils.collections.impl.filter.FilterApplierProto;
-import net.sf.kerner.utils.impl.util.Util;
+import net.sf.kerner.utils.collections.filter.impl.FilterApplierProto;
+import net.sf.kerner.utils.equal.Equalator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Individual<R, P, G>> implements
-        Population<R, P, G, I> {
+public abstract class PopulationAbstract implements Population {
 
     private static final Logger log = LoggerFactory.getLogger(PopulationAbstract.class);
 
-    private final FilterApplier<I> filterApplier = new FilterApplierProto<I>();
+    private final FilterApplier<Individual> filterApplier = new FilterApplierProto<Individual>();
 
-    private Set<I> individuals;
+    private Set<Individual> individuals;
 
     public PopulationAbstract() {
-        individuals = new LinkedHashSet<I>();
+        individuals = new LinkedHashSet<Individual>();
     }
 
-    protected PopulationAbstract(final Collection<? extends I> individuals) {
-        this.individuals = new LinkedHashSet<I>(individuals);
+    protected PopulationAbstract(final Collection<? extends Individual> individuals) {
+        this.individuals = new LinkedHashSet<Individual>(individuals);
     }
 
     /**
-     * @return {@code false} if given {@code Individual} was rejected by any filter or was already contained by this
-     *         {@code Population}; {@code true} otherwise
+     * @return {@code false} if given {@code Individual} was rejected by any
+     *         filter or was already contained by this {@code Population};
+     *         {@code true} otherwise
      */
     @Override
-    public synchronized boolean add(final I individual) {
+    public synchronized boolean add(final Individual individual) {
         final boolean accept = filterApplier.filter(individual);
         if (accept) {
             final boolean ac = individuals.add(individual);
@@ -63,13 +62,14 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
     }
 
     /**
-     * @return {@code false} if one of given individuals was rejected by any filter or was already contained by this
-     *         {@code Population}; {@code true} otherwise
+     * @return {@code false} if one of given individuals was rejected by any
+     *         filter or was already contained by this {@code Population};
+     *         {@code true} otherwise
      */
     @Override
-    public synchronized boolean addAll(final Collection<? extends I> individuala) {
+    public synchronized boolean addAll(final Collection<? extends Individual> individuala) {
         boolean result = true;
-        for (final I i : individuala) {
+        for (final Individual i : individuala) {
             final boolean accept = add(i);
             if (accept == false) {
                 result = false;
@@ -79,21 +79,17 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
     }
 
     @Override
-    public synchronized void addValidator(final ValidatorIndividual<R, P, G, I> validator) {
+    public synchronized void addValidator(final ValidatorIndividual validator) {
         filterApplier.addFilter(validator);
     }
 
     @Override
-    public abstract PopulationAbstract<R, P, G, I> clone();
+    public abstract PopulationAbstract clone();
 
     @Override
-    public synchronized boolean equals(final Object obj) {
-        return Util.equalsOnHashCode(this, obj);
-    }
-
-    @Override
-    public synchronized I find(final I individual, final Equalator<I> equalator) {
-        for (final I i : getIndividuals()) {
+    public synchronized Individual find(final Individual individual,
+            final Equalator<Individual> equalator) {
+        for (final Individual i : getIndividuals()) {
             if (equalator.areEqual(individual, i)) {
                 return i;
             }
@@ -102,8 +98,8 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
     }
 
     @Override
-    public synchronized I find(final int hashCode) {
-        for (final I i : getIndividuals()) {
+    public synchronized Individual find(final int hashCode) {
+        for (final Individual i : getIndividuals()) {
             if (i.hashCode() == hashCode) {
                 return i;
             }
@@ -112,8 +108,10 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
     }
 
     @Override
-    public synchronized List<I> getIndividuals() {
-        return new ArrayList<I>(individuals);
+    public synchronized List<Individual> getIndividuals() {
+        final List<Individual> result = new ArrayList<Individual>(individuals);
+        Collections.sort(result);
+        return result;
     }
 
     @Override
@@ -122,15 +120,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
     }
 
     @Override
-    public synchronized int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getIndividuals() == null) ? 0 : getIndividuals().hashCode());
-        return result;
-    }
-
-    @Override
-    public synchronized Iterator<I> iterator() {
+    public synchronized Iterator<Individual> iterator() {
         return getIndividuals().iterator();
     }
 
@@ -144,7 +134,7 @@ public abstract class PopulationAbstract<R, P, G extends Gene<P>, I extends Indi
         if (getSize() < newSize) {
             return;
         }
-        individuals = new LinkedHashSet<I>(getIndividuals().subList(0, newSize));
+        individuals = new LinkedHashSet<Individual>(getIndividuals().subList(0, newSize));
     }
 
 }

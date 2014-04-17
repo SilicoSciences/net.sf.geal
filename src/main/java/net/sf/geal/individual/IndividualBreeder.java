@@ -3,16 +3,15 @@ package net.sf.geal.individual;
 import java.util.Collection;
 import java.util.List;
 
-import net.sf.geal.gene.Gene;
-import net.sf.geal.mutator.genome.CrossOverGenome;
-import net.sf.geal.mutator.genome.MutatorGenome;
+import net.sf.geal.mutator.genome.MutatorCrossOver;
+import net.sf.geal.mutator.genome.MutatorPoint;
 
-public interface IndividualBreeder<R, P, G extends Gene<P>, I extends Individual<R, P, G>> {
+public interface IndividualBreeder {
 
-    Collection<I> breed(IndividualPair<R, P, G, I> pair);
+    Collection<Individual> breed(IndividualPair pair);
 
-    List<CrossOverGenome<R, P, G>> getCrossOvers();
+    List<MutatorCrossOver> getCrossOvers();
 
-    List<MutatorGenome<R, P, G>> getMutators();
+    List<MutatorPoint> getMutators();
 
 }

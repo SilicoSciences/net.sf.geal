@@ -1,32 +1,30 @@
 package net.sf.geal.individual;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import net.sf.geal.ExceptionRuntimeGA;
-import net.sf.geal.gene.Gene;
 import net.sf.geal.genome.Genome;
 import net.sf.geal.genome.GenomePair;
-import net.sf.geal.mutator.genome.CrossOverGenome;
-import net.sf.geal.mutator.genome.MutatorGenome;
-import net.sf.kerner.utils.collections.impl.UtilCollection;
+import net.sf.geal.mutator.genome.MutatorCrossOver;
+import net.sf.geal.mutator.genome.MutatorPoint;
+import net.sf.kerner.utils.collections.UtilCollection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class IndividualBreederImpl implements IndividualBreeder {
 
-public class IndividualBreederImpl<R, P, G extends Gene<P>, I extends Individual<R, P, G>> implements
-        IndividualBreeder<R, P, G, I> {
+    // private static final Logger log =
+    // LoggerFactory.getLogger(IndividualBreederImpl.class);
 
-    private static final Logger log = LoggerFactory.getLogger(IndividualBreederImpl.class);
+    private List<? extends MutatorCrossOver> crossOvers;
 
-    private List<CrossOverGenome<R, P, G>> crossOvers;
+    private final FactoryIndividual factoryIndividual;
 
-    private final FactoryIndividual<R, P, G, I> factoryIndividual;
+    private List<? extends MutatorPoint> mutators;
 
-    private List<MutatorGenome<R, P, G>> mutators;
-
-    public IndividualBreederImpl(final List<MutatorGenome<R, P, G>> mutators,
-            final List<CrossOverGenome<R, P, G>> crossOvers, final FactoryIndividual<R, P, G, I> factoryIndividual) {
+    public IndividualBreederImpl(final List<? extends MutatorPoint> mutators,
+            final List<? extends MutatorCrossOver> crossOvers,
+            final FactoryIndividual factoryIndividual) {
 
         this.mutators = mutators;
         this.crossOvers = crossOvers;
@@ -34,7 +32,8 @@ public class IndividualBreederImpl<R, P, G extends Gene<P>, I extends Individual
         this.factoryIndividual = factoryIndividual;
     }
 
-    public Collection<I> breed(final IndividualPair<R, P, G, I> pair) {
+    @Override
+    public Collection<Individual> breed(final IndividualPair pair) {
 
         if (getCrossOvers() == null) {
             throw new ExceptionRuntimeGA("set cross overs first");
@@ -44,15 +43,15 @@ public class IndividualBreederImpl<R, P, G extends Gene<P>, I extends Individual
             throw new ExceptionRuntimeGA("set mutators first");
         }
 
-        final Collection<I> result = UtilCollection.newCollection();
+        final Collection<Individual> result = UtilCollection.newCollection();
 
-        for (final CrossOverGenome<R, P, G> c : getCrossOvers()) {
+        for (final MutatorCrossOver c : getCrossOvers()) {
 
-            final GenomePair<R, P, G> i = c.cross(new GenomePair<R, P, G>(pair.getFirst().getGenome(), pair.getSecond()
-                    .getGenome()));
-            Genome<R, P, G> f = i.getFirst();
-            Genome<R, P, G> s = i.getSecond();
-            for (final MutatorGenome<R, P, G> m : getMutators()) {
+            final GenomePair i = c.cross(new GenomePair(pair.getFirst().getGenome(), pair
+                    .getSecond().getGenome()));
+            Genome f = i.getFirst();
+            Genome s = i.getSecond();
+            for (final MutatorPoint m : getMutators()) {
                 f = m.mutate(f);
                 s = m.mutate(s);
 
@@ -62,25 +61,28 @@ public class IndividualBreederImpl<R, P, G extends Gene<P>, I extends Individual
         }
 
         // if (log.isDebugEnabled()) {
-        // log.debug("breeded new individuals: " + UtilCollection.toString(result));
+        // log.debug("breeded new individuals: " +
+        // UtilCollection.toString(result));
         // }
 
         return result;
     }
 
-    public List<CrossOverGenome<R, P, G>> getCrossOvers() {
-        return crossOvers;
+    @Override
+    public List<MutatorCrossOver> getCrossOvers() {
+        return new ArrayList<MutatorCrossOver>(crossOvers);
     }
 
-    public List<MutatorGenome<R, P, G>> getMutators() {
-        return mutators;
+    @Override
+    public List<MutatorPoint> getMutators() {
+        return new ArrayList<MutatorPoint>(mutators);
     }
 
-    public void setCrossOvers(final List<CrossOverGenome<R, P, G>> crossOvers) {
+    public void setCrossOvers(final List<MutatorCrossOver> crossOvers) {
         this.crossOvers = crossOvers;
     }
 
-    public void setMutators(final List<MutatorGenome<R, P, G>> mutators) {
+    public void setMutators(final List<MutatorPoint> mutators) {
         this.mutators = mutators;
     }
 

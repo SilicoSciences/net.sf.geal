@@ -1,7 +1,7 @@
 package net.sf.geal.mutator.gene;
 
-public interface MutatorGene<P> {
+public interface MutatorGene {
 
-    P mutate(P oldValue);
+    Object mutate(Object oldValue);
 
 }

@@ -1,11 +1,12 @@
 package net.sf.geal.mutator.gene;
 
-import net.sf.kerner.utils.math.RandomFactory;
+import net.sf.kerner.utils.math.UtilRandom;
 
-public class MutatorGeneBoolean implements MutatorGene<Boolean> {
+public class MutatorGeneBoolean implements MutatorGene {
 
-    public Boolean mutate(final Boolean oldValue) {
-        return RandomFactory.generate();
+    @Override
+    public Boolean mutate(final Object oldValue) {
+        return UtilRandom.generate();
     }
 
 }

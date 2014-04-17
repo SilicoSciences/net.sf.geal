@@ -1,64 +1,85 @@
 package net.sf.geal.gene;
 
+import net.sf.geal.ExceptionRuntimeGA;
 import net.sf.geal.mutator.gene.MutatorGene;
-import net.sf.kerner.utils.impl.util.Util;
 
-public class GeneImpl<P> implements Gene<P> {
+public class GeneImpl implements Gene {
 
-    private volatile MutatorGene<P> mutator;
+    protected volatile MutatorGene mutator;
 
-    private volatile P value;
+    protected volatile Object value;
 
-    public GeneImpl(final P value) {
+    public GeneImpl(final Gene template) {
+        value = template.express();
+        mutator = template.getMutator();
+    }
+
+    public GeneImpl(final Object value) {
         this.value = value;
     }
 
-    public GeneImpl(final Gene<P> template) {
-        this.value = template.express();
-        this.mutator = template.getMutator();
+    @Override
+    public synchronized GeneImpl clone() {
+        return new GeneImpl(this);
     }
 
-    public synchronized void mutate() {
-        impress(getMutator().mutate(express()));
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof GeneImpl))
+            return false;
+        final GeneImpl other = (GeneImpl) obj;
+        if (value == null) {
+            if (other.value != null)
+                return false;
+        } else if (!value.equals(other.value))
+            return false;
+        return true;
+        // return super.equals(obj);
     }
 
-    public synchronized void setMutator(final MutatorGene<P> mutator) {
-        this.mutator = mutator;
-    }
-
-    public synchronized MutatorGene<P> getMutator() {
-        return mutator;
-    }
-
-    public synchronized P express() {
+    @Override
+    public synchronized Object express() {
         return value;
     }
 
-    public synchronized void impress(final P property) {
-        this.value = property;
-    };
+    @Override
+    public synchronized MutatorGene getMutator() {
+        return mutator;
+    }
 
     @Override
-    public synchronized int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((value == null) ? 0 : value.hashCode());
         return result;
+        // return super.hashCode();
+    }
+
+    @Override
+    public synchronized void impress(final Object property) {
+        value = property;
+    }
+
+    @Override
+    public synchronized void mutate() {
+        if (mutator == null) {
+            throw new ExceptionRuntimeGA("set mutator first");
+        }
+        impress(getMutator().mutate(express()));
+    }
+
+    public synchronized void setMutator(final MutatorGene mutator) {
+        this.mutator = mutator;
     }
 
     @Override
     public String toString() {
-        return value.toString();
-    }
-
-    @Override
-    public synchronized boolean equals(final Object obj) {
-        return Util.equalsOnHashCode(this, obj);
-    }
-
-    @Override
-    public synchronized GeneImpl<P> clone() {
-        return new GeneImpl<P>(this);
+        return getClass().getSimpleName() + "=" + value.toString();
     }
 
 }
