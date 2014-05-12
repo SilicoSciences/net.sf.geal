@@ -16,16 +16,12 @@ Export-Package: net.sf.geal;version="0.3.0.qualifier",
  net.sf.geal.terminator;version="0.3.0.qualifier"
 Import-Package: net.sf.jranges.range.integer;version="0.5.0",
  net.sf.jranges.range.integer.impl;version="0.5.0",
- net.sf.kerner.utils;version="0.19.0",
  net.sf.kerner.utils.collections,
  net.sf.kerner.utils.collections.filter,
- net.sf.kerner.utils.collections.filter.impl;version="0.25.0",
  net.sf.kerner.utils.collections.impl,
  net.sf.kerner.utils.collections.list.impl,
  net.sf.kerner.utils.collections.visitor,
- net.sf.kerner.utils.equal;version="0.19.0",
  net.sf.kerner.utils.math;version="0.19.0",
  net.sf.kerner.utils.pair;version="0.19.0",
- net.sf.kerner.utils.progress;version="0.19.0",
  org.slf4j;version="1.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
