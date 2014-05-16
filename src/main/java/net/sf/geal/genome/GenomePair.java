@@ -1,8 +1,8 @@
 package net.sf.geal.genome;
 
-import net.sf.kerner.utils.pair.ObjectPairSameImpl;
+import net.sf.kerner.utils.pair.PairSameImpl;
 
-public class GenomePair extends ObjectPairSameImpl<Genome> {
+public class GenomePair extends PairSameImpl<Genome> {
 
     public GenomePair() {
         super();
