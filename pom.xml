@@ -144,12 +144,12 @@
   	<dependency>
   		<groupId>net.sf.kerner-utils-collections</groupId>
   		<artifactId>kerner-utils-collections</artifactId>
-  		<version>0.25.0</version>
+  		<version>0.25.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
   		<groupId>net.sf.jranges</groupId>
   		<artifactId>jranges</artifactId>
-  		<version>0.4.9</version>
+  		<version>0.5.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
 </project>
