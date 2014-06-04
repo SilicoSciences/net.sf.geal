@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GeneticAlgorithms
 Bundle-SymbolicName: net.sf.geal
-Bundle-Version: 0.3.0
+Bundle-Version: 0.3.0.qualifier
 Export-Package: net.sf.geal;version="0.3.0.qualifier",
  net.sf.geal.gene;version="0.3.0.qualifier",
  net.sf.geal.gene.impl;version="0.3.0.qualifier",
