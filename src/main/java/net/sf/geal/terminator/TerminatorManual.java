@@ -33,6 +33,11 @@ public class TerminatorManual implements TerminatorEvolution, ProgressMonitor {
     }
 
     @Override
+    public void setTaskName(final String name) {
+        delegate.setTaskName(name);
+    }
+
+    @Override
     public void started(final int totalWorkload) {
         delegate.started(totalWorkload);
     }
