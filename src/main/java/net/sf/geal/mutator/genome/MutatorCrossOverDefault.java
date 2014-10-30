@@ -32,7 +32,7 @@ public class MutatorCrossOverDefault extends MutatorAbstract implements MutatorC
 
     @Override
     public GenomePair cross(final GenomePair genomes) {
-        final int smallestSize = (int) UtilMath.min(genomes.getFirst().getGenes().size(), genomes
+        final int smallestSize = (int) UtilMath.getMin(genomes.getFirst().getGenes().size(), genomes
                 .getSecond().getGenes().size());
         final Genome result1 = genomes.getFirst().clone();
         final Genome result2 = genomes.getSecond().clone();
