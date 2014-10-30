@@ -11,7 +11,7 @@ import java.util.Set;
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
 import net.sf.kerner.utils.collections.filter.FilterApplier;
-import net.sf.kerner.utils.collections.filter.impl.FilterApplierProto;
+import net.sf.kerner.utils.collections.filter.FilterApplierProto;
 import net.sf.kerner.utils.equal.Equalator;
 
 import org.slf4j.Logger;

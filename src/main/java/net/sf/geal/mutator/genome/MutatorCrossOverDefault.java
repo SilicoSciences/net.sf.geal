@@ -6,7 +6,7 @@ import net.sf.geal.gene.Gene;
 import net.sf.geal.genome.Genome;
 import net.sf.geal.genome.GenomePair;
 import net.sf.geal.mutator.MutatorAbstract;
-import net.sf.kerner.utils.collections.list.impl.UtilList;
+import net.sf.kerner.utils.collections.list.UtilList;
 import net.sf.kerner.utils.math.UtilMath;
 import net.sf.kerner.utils.math.UtilRandom;
 

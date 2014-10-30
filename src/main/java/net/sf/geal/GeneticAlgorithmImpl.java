@@ -14,7 +14,7 @@ import net.sf.geal.terminator.TerminatorEvolution;
 import net.sf.geal.terminator.TerminatorGenerations;
 import net.sf.geal.terminator.TerminatorPopulationSize;
 import net.sf.kerner.utils.collections.UtilCollection;
-import net.sf.kerner.utils.collections.list.impl.UtilList;
+import net.sf.kerner.utils.collections.list.UtilList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

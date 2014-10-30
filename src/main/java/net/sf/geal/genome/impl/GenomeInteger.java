@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.sf.geal.gene.Gene;
 import net.sf.geal.genome.GenomeAbstract;
-import net.sf.kerner.utils.collections.list.impl.UtilList;
+import net.sf.kerner.utils.collections.list.UtilList;
 
 public class GenomeInteger extends GenomeAbstract {
 
