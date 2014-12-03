@@ -70,11 +70,7 @@ public abstract class IndividualAbstract implements Individual {
         try {
             return fitness.get();
         } catch (final Exception e) {
-            if (log.isErrorEnabled()) {
-                log.error("failed to calculate fitness", e.getLocalizedMessage());
-                e.printStackTrace();
-            }
-            return -1;
+            throw new RuntimeException(e);
         }
     }
 
