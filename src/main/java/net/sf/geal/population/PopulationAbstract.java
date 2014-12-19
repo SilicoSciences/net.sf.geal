@@ -10,6 +10,7 @@ import java.util.Set;
 
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.ValidatorIndividual;
+import net.sf.kerner.utils.collections.UtilCollection;
 import net.sf.kerner.utils.collections.filter.FilterApplier;
 import net.sf.kerner.utils.collections.filter.FilterApplierProto;
 import net.sf.kerner.utils.equal.Equalator;
@@ -109,6 +110,9 @@ public abstract class PopulationAbstract implements Population {
 
     @Override
     public synchronized List<Individual> getIndividuals() {
+        if (UtilCollection.nullOrEmpty(individuals)) {
+            return Collections.emptyList();
+        }
         final List<Individual> result = new ArrayList<Individual>(individuals);
         Collections.sort(result);
         return result;
