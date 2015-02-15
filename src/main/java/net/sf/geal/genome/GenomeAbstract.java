@@ -9,12 +9,16 @@ import net.sf.kerner.utils.collections.list.UtilList;
 
 public abstract class GenomeAbstract implements Genome {
 
-    private List<Gene> genes = UtilList.newList();
+    protected List<Gene> genes = UtilList.newList();
 
-    private Properties properties = new Properties();
+    protected Properties properties = new Properties();
 
     public GenomeAbstract() {
 
+    }
+
+    public GenomeAbstract(final Gene gene) {
+        genes.add(gene);
     }
 
     public GenomeAbstract(final List<Gene> genes) {
