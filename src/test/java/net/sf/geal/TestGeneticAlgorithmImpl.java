@@ -20,6 +20,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestGeneticAlgorithmImpl {
@@ -43,6 +44,7 @@ public class TestGeneticAlgorithmImpl {
         ga = null;
     }
 
+    @Ignore
     @Test
     public final void testEvolve01() {
 
