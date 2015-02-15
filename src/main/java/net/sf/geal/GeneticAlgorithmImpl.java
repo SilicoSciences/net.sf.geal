@@ -86,8 +86,8 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
             history.add(getCurrentPopulation().clone());
             currentPopulation = evolve(getCurrentPopulation());
             if (log.isInfoEnabled()) {
-                log.info("got new population (top 10)"
-                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(10)));
+                log.info("got new population (top 6)"
+                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(6)));
                 // for (final Individual g :
                 // getCurrentPopulation().getSubPopulation(10)) {
                 // log.info(g.getGenome().getProperties().toString());

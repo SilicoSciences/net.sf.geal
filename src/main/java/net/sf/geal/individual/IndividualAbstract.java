@@ -2,20 +2,19 @@ package net.sf.geal.individual;
 
 import java.util.concurrent.Future;
 
+import net.sf.geal.ExceptionRuntimeGA;
 import net.sf.geal.genome.Genome;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class IndividualAbstract implements Individual {
 
-    private static final Logger log = LoggerFactory.getLogger(IndividualAbstract.class);
+    // private static final Logger log =
+    // LoggerFactory.getLogger(IndividualAbstract.class);
 
     protected Future<Double> fitness = null;
 
-    private final int generation;
+    protected final int generation;
 
-    private final Genome genome;
+    protected final Genome genome;
 
     public IndividualAbstract(final Genome genome) {
         this(0, genome);
@@ -70,11 +69,7 @@ public abstract class IndividualAbstract implements Individual {
         try {
             return fitness.get();
         } catch (final Exception e) {
-            if (log.isErrorEnabled()) {
-                log.error("failed to calculate fitness", e.getLocalizedMessage());
-                e.printStackTrace();
-            }
-            return -1;
+            throw new RuntimeException(e);
         }
     }
 
@@ -104,6 +99,18 @@ public abstract class IndividualAbstract implements Individual {
         // fitnessCache volatile
         // genome final
         return generation + ":" + genome.toString();
+    }
+
+    @Override
+    public synchronized void triggerCalculation() {
+        try {
+            if (fitness == null) {
+                calculateFitness();
+            }
+            // fitness.get();
+        } catch (final Exception e) {
+            throw new ExceptionRuntimeGA(e);
+        }
     }
 
 }
