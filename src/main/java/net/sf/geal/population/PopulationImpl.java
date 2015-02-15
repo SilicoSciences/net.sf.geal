@@ -13,24 +13,25 @@ import net.sf.geal.individual.ValidatorIndividual;
 import net.sf.kerner.utils.collections.UtilCollection;
 import net.sf.kerner.utils.collections.filter.FilterApplier;
 import net.sf.kerner.utils.collections.filter.FilterApplierProto;
+import net.sf.kerner.utils.collections.list.UtilList;
 import net.sf.kerner.utils.equal.Equalator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class PopulationAbstract implements Population {
+public class PopulationImpl implements Population {
 
-    private static final Logger log = LoggerFactory.getLogger(PopulationAbstract.class);
+    private static final Logger log = LoggerFactory.getLogger(PopulationImpl.class);
 
     private final FilterApplier<Individual> filterApplier = new FilterApplierProto<Individual>();
 
     private Set<Individual> individuals;
 
-    public PopulationAbstract() {
+    public PopulationImpl() {
         individuals = new LinkedHashSet<Individual>();
     }
 
-    protected PopulationAbstract(final Collection<? extends Individual> individuals) {
+    protected PopulationImpl(final Collection<? extends Individual> individuals) {
         this.individuals = new LinkedHashSet<Individual>(individuals);
     }
 
@@ -85,7 +86,9 @@ public abstract class PopulationAbstract implements Population {
     }
 
     @Override
-    public abstract PopulationAbstract clone();
+    public synchronized PopulationImpl clone() {
+        return new PopulationImpl(UtilList.clone(getIndividuals()));
+    }
 
     @Override
     public synchronized Individual find(final Individual individual,
@@ -121,6 +124,18 @@ public abstract class PopulationAbstract implements Population {
     @Override
     public synchronized int getSize() {
         return getIndividuals().size();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public synchronized Population getSubPopulation(final int size) {
+        @SuppressWarnings("rawtypes")
+        final List list = new ArrayList(getIndividuals());
+        if (size <= list.size()) {
+            return new PopulationImpl(UtilList.clone(list.subList(0, size)));
+        } else {
+            return clone();
+        }
     }
 
     @Override
