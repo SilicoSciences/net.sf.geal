@@ -2,18 +2,18 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GeneticAlgorithms
 Bundle-SymbolicName: net.sf.geal
-Bundle-Version: 0.4.0.qualifier
-Export-Package: net.sf.geal;version="0.4.0.qualifier",
- net.sf.geal.gene;version="0.4.0.qualifier",
- net.sf.geal.gene.impl;version="0.4.0.qualifier",
- net.sf.geal.genome;version="0.4.0.qualifier",
- net.sf.geal.genome.impl;version="0.4.0.qualifier",
- net.sf.geal.individual;version="0.4.0.qualifier",
- net.sf.geal.mutator;version="0.4.0.qualifier",
- net.sf.geal.mutator.gene;version="0.4.0.qualifier",
- net.sf.geal.mutator.genome;version="0.4.0.qualifier",
- net.sf.geal.population;version="0.4.0.qualifier",
- net.sf.geal.terminator;version="0.4.0.qualifier"
+Bundle-Version: 0.4.1
+Export-Package: net.sf.geal;version="0.4.1",
+ net.sf.geal.gene;version="0.4.1",
+ net.sf.geal.gene.impl;version="0.4.1",
+ net.sf.geal.genome;version="0.4.1",
+ net.sf.geal.genome.impl;version="0.4.1",
+ net.sf.geal.individual;version="0.4.1",
+ net.sf.geal.mutator;version="0.4.1",
+ net.sf.geal.mutator.gene;version="0.4.1",
+ net.sf.geal.mutator.genome;version="0.4.1",
+ net.sf.geal.population;version="0.4.1",
+ net.sf.geal.terminator;version="0.4.1"
 Import-Package: net.sf.jranges.range.doublerange;version="0.5.0",
  net.sf.jranges.range.doublerange.impl;version="0.5.0",
  net.sf.jranges.range.integerrange;version="0.5.0",
