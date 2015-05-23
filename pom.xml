@@ -7,7 +7,7 @@
 	</parent>
 	<groupId>net.sf.geal</groupId>
 	<artifactId>geal</artifactId>
-	<version>0.4.10</version>
+	<version>0.4.11-SNAPSHOT</version>
 	<name>Genetic Algorithms</name>
 	<properties>
 		<jdk.version>1.6</jdk.version>
