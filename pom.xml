@@ -7,7 +7,7 @@
 	</parent>
   <groupId>net.sf.geal</groupId>
   <artifactId>geal</artifactId>
-  <version>0.4.5-SNAPSHOT</version>
+  <version>0.4.5</version>
   <name>Genetic Algorithms</name>
   <properties>
 		<jdk.version>1.6</jdk.version>
@@ -128,9 +128,8 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Bundle-Version>${parsedVersion.osgiVersion}</Bundle-Version>
+							<Bundle-Version>${project.version}</Bundle-Version>
 							<Bundle-Description>${project.description}</Bundle-Description>
-							<Implementation-Version>${project.version}</Implementation-Version>
 						</manifestEntries>
 						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
 					</archive>
