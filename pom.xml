@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>9</version>
 	</parent>
-  <groupId>net.sf.geal</groupId>
-  <artifactId>geal</artifactId>
-  <version>0.4.9-SNAPSHOT</version>
-  <name>Genetic Algorithms</name>
-  <properties>
+	<groupId>net.sf.geal</groupId>
+	<artifactId>geal</artifactId>
+	<version>0.4.9</version>
+	<name>Genetic Algorithms</name>
+	<properties>
 		<jdk.version>1.6</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -44,7 +44,7 @@
 		</site>
 	</distributionManagement>
 	<build>
-	<plugins>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -123,32 +123,28 @@
 				<version>2.6</version>
 				<configuration>
 					<archive>
-						<manifestEntries>
-							<Bundle-Version>${project.version}</Bundle-Version>
-							<Bundle-Description>${project.description}</Bundle-Description>
-						</manifestEntries>
 						<manifestFile>META-INF/MANIFEST.MF</manifestFile>
 					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
-		</build>
-  <dependencies>
-  	<dependency>
+	</build>
+	<dependencies>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-  	<dependency>
-  		<groupId>net.sf.kerner-utils-collections</groupId>
-  		<artifactId>kerner-utils-collections</artifactId>
-  		<version>0.27.0</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>net.sf.jranges</groupId>
-  		<artifactId>jranges</artifactId>
-  		<version>0.6.1</version>
-  	</dependency>
-  </dependencies>
+		<dependency>
+			<groupId>net.sf.kerner-utils-collections</groupId>
+			<artifactId>kerner-utils-collections</artifactId>
+			<version>0.27.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jranges</groupId>
+			<artifactId>jranges</artifactId>
+			<version>0.6.1</version>
+		</dependency>
+	</dependencies>
 </project>
