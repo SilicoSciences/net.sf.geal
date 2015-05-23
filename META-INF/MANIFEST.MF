@@ -2,18 +2,18 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GeneticAlgorithms
 Bundle-SymbolicName: net.sf.geal
-Bundle-Version: 0.4.2
-Export-Package: net.sf.geal;version="0.4.1",
- net.sf.geal.gene;version="0.4.1",
- net.sf.geal.gene.impl;version="0.4.1",
- net.sf.geal.genome;version="0.4.1",
- net.sf.geal.genome.impl;version="0.4.1",
- net.sf.geal.individual;version="0.4.1",
- net.sf.geal.mutator;version="0.4.1",
- net.sf.geal.mutator.gene;version="0.4.1",
- net.sf.geal.mutator.genome;version="0.4.1",
- net.sf.geal.population;version="0.4.1",
- net.sf.geal.terminator;version="0.4.1"
+Bundle-Version: 0.4.11
+Export-Package: net.sf.geal,
+ net.sf.geal.gene,
+ net.sf.geal.gene.impl,
+ net.sf.geal.genome,
+ net.sf.geal.genome.impl,
+ net.sf.geal.individual,
+ net.sf.geal.mutator,
+ net.sf.geal.mutator.gene,
+ net.sf.geal.mutator.genome,
+ net.sf.geal.population,
+ net.sf.geal.terminator
 Import-Package: net.sf.jranges.range.doublerange;version="0.5.0",
  net.sf.jranges.range.doublerange.impl;version="0.5.0",
  net.sf.jranges.range.integerrange;version="0.5.0",
@@ -54,7 +54,6 @@ Import-Package: net.sf.jranges.range.doublerange;version="0.5.0",
  net.sf.kerner.utils.monitor.memory;version="0.19.0",
  net.sf.kerner.utils.pair;version="0.19.0",
  net.sf.kerner.utils.progress;version="0.19.0",
- net.sf.kerner.utils.rcp;version="1.0.0.qualifier",
  net.sf.kerner.utils.swing;version="0.19.0",
  net.sf.kerner.utils.time;version="0.19.0",
  net.sf.kerner.utils.transformer;version="0.19.0",
