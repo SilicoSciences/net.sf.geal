@@ -7,7 +7,7 @@
 	</parent>
 	<groupId>net.sf.geal</groupId>
 	<artifactId>geal</artifactId>
-	<version>0.4.12-SNAPSHOT</version>
+	<version>0.4.12</version>
 	<name>Genetic Algorithms</name>
 	<properties>
 		<jdk.version>1.6</jdk.version>
@@ -34,7 +34,7 @@
 		<url>git://git.code.sf.net/p/geal/code</url>
 		<connection>scm:git://git.code.sf.net/p/geal/code</connection>
 		<developerConnection>scm:git:ssh://akerner@git.code.sf.net/p/geal/code </developerConnection>
-		<tag>HEAD</tag>
+		<tag>geal-0.4.12</tag>
 	</scm>
 	<distributionManagement>
 		<site>
