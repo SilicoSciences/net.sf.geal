@@ -10,7 +10,6 @@
 	<version>0.4.13-SNAPSHOT</version>
 	<name>Genetic Algorithms</name>
 	<properties>
-		<jdk.version>1.6</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<developers>
@@ -60,6 +59,10 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-install-plugin</artifactId>
