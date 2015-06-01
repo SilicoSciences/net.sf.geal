@@ -2,18 +2,18 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: GeneticAlgorithms
 Bundle-SymbolicName: net.sf.geal
-Bundle-Version: 0.4.11
-Export-Package: net.sf.geal,
- net.sf.geal.gene,
- net.sf.geal.gene.impl,
- net.sf.geal.genome,
- net.sf.geal.genome.impl,
- net.sf.geal.individual,
- net.sf.geal.mutator,
- net.sf.geal.mutator.gene,
- net.sf.geal.mutator.genome,
- net.sf.geal.population,
- net.sf.geal.terminator
+Bundle-Version: 0.4.13
+Export-Package: net.sf.geal;version="0.4.13",
+ net.sf.geal.gene;version="0.4.13",
+ net.sf.geal.gene.impl;version="0.4.13",
+ net.sf.geal.genome;version="0.4.13",
+ net.sf.geal.genome.impl;version="0.4.13",
+ net.sf.geal.individual;version="0.4.13",
+ net.sf.geal.mutator;version="0.4.13",
+ net.sf.geal.mutator.gene;version="0.4.13",
+ net.sf.geal.mutator.genome;version="0.4.13",
+ net.sf.geal.population;version="0.4.13",
+ net.sf.geal.terminator;version="0.4.13"
 Import-Package: net.sf.jranges.range.doublerange;version="0.5.0",
  net.sf.jranges.range.doublerange.impl;version="0.5.0",
  net.sf.jranges.range.integerrange;version="0.5.0",
