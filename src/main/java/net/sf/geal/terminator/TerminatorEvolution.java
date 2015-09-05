@@ -5,4 +5,8 @@ import net.sf.kerner.utils.collections.visitor.Visitor;
 
 public interface TerminatorEvolution extends Visitor<Boolean, GeneticAlgorithm> {
 
+	void setEnabled(boolean enabled);
+
+	boolean isEnabled();
+
 }
