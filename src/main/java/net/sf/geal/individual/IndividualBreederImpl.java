@@ -1,6 +1,7 @@
 package net.sf.geal.individual;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -8,7 +9,9 @@ import net.sf.geal.ExceptionRuntimeGA;
 import net.sf.geal.genome.Genome;
 import net.sf.geal.genome.GenomePair;
 import net.sf.geal.mutator.genome.MutatorCrossOver;
+import net.sf.geal.mutator.genome.MutatorCrossOverDefault;
 import net.sf.geal.mutator.genome.MutatorPoint;
+import net.sf.geal.mutator.genome.MutatorPointDefault;
 import net.sf.kerner.utils.collections.UtilCollection;
 
 public class IndividualBreederImpl implements IndividualBreeder {
@@ -21,6 +24,12 @@ public class IndividualBreederImpl implements IndividualBreeder {
     private final FactoryIndividual factoryIndividual;
 
     private List<? extends MutatorPoint> mutators;
+
+    public IndividualBreederImpl(FactoryIndividual factoryIndividual) {
+        mutators = Arrays.asList(new MutatorPointDefault());
+        crossOvers = Arrays.asList(new MutatorCrossOverDefault());
+        this.factoryIndividual = factoryIndividual;
+    }
 
     public IndividualBreederImpl(final List<? extends MutatorPoint> mutators,
             final List<? extends MutatorCrossOver> crossOvers,
