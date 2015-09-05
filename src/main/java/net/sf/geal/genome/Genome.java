@@ -7,15 +7,11 @@ import net.sf.geal.gene.Gene;
 
 public interface Genome extends Iterable<Gene> {
 
-    Genome clone();
+	Genome clone();
 
-    Object express();
+	List<Gene> getGenes();
 
-    List<Gene> getGenes();
+	Properties getProperties();
 
-    Properties getProperties();
-
-    void impress(Object result);
-
-    void setProperties(Properties properties);
+	void setProperties(Properties properties);
 }
