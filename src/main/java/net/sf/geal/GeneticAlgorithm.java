@@ -8,18 +8,20 @@ import net.sf.geal.terminator.TerminatorEvolution;
 
 public interface GeneticAlgorithm {
 
-    void addListener(ListenerEvolution listener);
+	void addListener(ListenerEvolution listener);
 
-    void addTerminator(TerminatorEvolution terminator);
+	void addTerminator(TerminatorEvolution terminator);
 
-    void evolve();
+	void evolve();
 
-    Population getCurrentPopulation();
+	int getMaxPopulationSize();
 
-    IndividualBreeder getIndividualBreeder();
+	Population getCurrentPopulation();
 
-    List<Population> getHistory();
+	IndividualBreeder getIndividualBreeder();
 
-    double getPercentageOfPairings();
+	List<Population> getHistory();
+
+	double getPercentageOfPairings();
 
 }

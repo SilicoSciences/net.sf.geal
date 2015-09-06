@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.geal.individual.Individual;
 import net.sf.geal.individual.IndividualBreeder;
@@ -13,8 +14,8 @@ import net.sf.geal.population.Population;
 import net.sf.geal.terminator.TerminatorEvolution;
 import net.sf.geal.terminator.TerminatorGenerations;
 import net.sf.geal.terminator.TerminatorPopulationSize;
-import net.sf.kerner.utils.collections.UtilCollection;
 import net.sf.kerner.utils.collections.list.UtilList;
+import net.sf.kerner.utils.collections.set.UtilSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,19 +42,20 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
 
     private final List<Population> history = UtilList.newList();
 
-    private final List<ListenerEvolution> listeners = UtilList.newList();
+    private final Set<ListenerEvolution> listeners = UtilSet.newSet();
 
     private volatile int maxGrowRetry = DEFAULT_GROW_MAX_RETRY;
 
     private volatile double percentageOfPairings;
 
-    private final TerminatorPopulationSize terminatorPopulationSize = new TerminatorPopulationSize(
-            DEFAULT_MAX_POPULATION_SIZE);
+    private final TerminatorPopulationSize terminatorPopulationSize = new TerminatorPopulationSize();
 
     private final TerminatorGenerations terminatorGenerations = new TerminatorGenerations(
             DEFAULT_MAX_GENERATIONS);
 
     private final List<TerminatorEvolution> terminators = UtilList.newList();
+
+    private int maxPopulationSize = DEFAULT_MAX_POPULATION_SIZE;
 
     public GeneticAlgorithmImpl(final Population initPopulation) {
         currentPopulation = initPopulation;
@@ -72,54 +74,80 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
         terminators.add(terminator);
     }
 
-    @Override
-    public synchronized void evolve() {
+    private void checkPreReqEvolve() {
         if (getIndividualBreeder() == null) {
             throw new ExceptionRuntimeGA("set individual factory first");
         }
         if (getCurrentPopulation() == null || getCurrentPopulation().getIndividuals().isEmpty()) {
             throw new ExceptionRuntimeGA("invalid population");
         }
+    }
+
+    private boolean checkRun() {
+        for (final TerminatorEvolution t : getTerminators()) {
+            if (t.visit(this)) {
+                if (log.isInfoEnabled()) {
+                    log.info(t + " requested termination");
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void doEvolve() {
+        history.add(getCurrentPopulation().clone());
+        currentPopulation = evolve(getCurrentPopulation());
+        if (log.isInfoEnabled()) {
+            // log.info("got new population (top 6)"
+            // +
+            // UtilCollection.toString(getCurrentPopulation().getSubPopulation(6)));
+            // for (final Individual g :
+            // getCurrentPopulation().getSubPopulation(10)) {
+            // log.info(g.getGenome().getProperties().toString());
+            // }
+        }
+        for (final ListenerEvolution l : listeners) {
+            l.newPopulation(currentPopulation);
+        }
+        if (log.isInfoEnabled()) {
+            log.info("generations passed " + history.size() + ", population size: "
+                    + currentPopulation.getSize());
+        }
+        // if (log.isDebugEnabled()) {
+        // log.debug("history " + UtilCollection.toString(history));
+        // }
+    }
+
+    @Override
+    public synchronized void evolve() {
+        checkPreReqEvolve();
         boolean run = true;
         while (run) {
-
-            history.add(getCurrentPopulation().clone());
-            currentPopulation = evolve(getCurrentPopulation());
-            if (log.isInfoEnabled()) {
-                log.info("got new population (top 6)"
-                        + UtilCollection.toString(getCurrentPopulation().getSubPopulation(6)));
-                // for (final Individual g :
-                // getCurrentPopulation().getSubPopulation(10)) {
-                // log.info(g.getGenome().getProperties().toString());
-                // }
-            }
-            for (final ListenerEvolution l : listeners) {
-                l.newPopulation(currentPopulation);
-            }
-            if (log.isInfoEnabled()) {
-                log.info("generations passed " + history.size() + ", population size: "
-                        + currentPopulation.getSize());
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("history " + UtilCollection.toString(history));
-            }
-
-            for (final TerminatorEvolution t : getTerminators()) {
-                if (t.visit(this)) {
-                    run = false;
-                    if (log.isInfoEnabled()) {
-                        log.info(t + " requested termination");
-                    }
-                    break;
-                }
-            }
+            doEvolve();
+            run = checkRun();
         }
         if (log.isInfoEnabled()) {
             log.info("all done");
         }
     }
 
-    private Population evolve(final Population population) {
+    public synchronized void evolve(int generations) {
+        checkPreReqEvolve();
+        boolean run = true;
+        for (int i = 0; i < generations; i++) {
+            if (!run) {
+                break;
+            }
+            doEvolve();
+            run = checkRun();
+        }
+        if (log.isInfoEnabled()) {
+            log.info("all done");
+        }
+    }
+
+    private synchronized Population evolve(final Population population) {
 
         grow(population);
         trim(population);
@@ -143,8 +171,9 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
         return factoryIndividual;
     }
 
+    @Override
     public synchronized int getMaxPopulationSize() {
-        return terminatorPopulationSize.getMaxPopulationSize();
+        return maxPopulationSize;
     }
 
     @Override
@@ -195,6 +224,10 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
             breedingIndividuals = new ArrayList<Individual>(population.clone().getIndividuals());
         }
 
+        if (breedingIndividuals.size() < 2) {
+            throw new IllegalArgumentException("Not enough individuals for evolution");
+        }
+
         if (log.isDebugEnabled()) {
             log.debug("growing population with " + breedingIndividuals.size() + " individuals");
         }
@@ -234,7 +267,8 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
             currentGrowRetry = 0;
         } else {
             if (log.isDebugEnabled()) {
-                log.debug("done growing, new pop. size: " + population.getSize());
+                log.debug("done growing, new pop. size: " + population.getSize()
+                        + ", max. fitness: " + getCurrentPopulation().getMaxFitness());
             }
             currentGrowRetry = 0;
         }
@@ -245,7 +279,15 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
     }
 
     public synchronized void setMaxPopulationSize(final int maxPopulationSize) {
-        terminatorPopulationSize.setMaxPopulationSize(maxPopulationSize);
+        this.setMaxPopulationSize(maxPopulationSize, true);
+    }
+
+    public synchronized void setMaxPopulationSize(final int maxPopulationSize, boolean terminate) {
+        if (maxPopulationSize <= 0) {
+            throw new IllegalArgumentException("for " + maxPopulationSize);
+        }
+        this.maxPopulationSize = maxPopulationSize;
+        terminatorPopulationSize.setEnabled(terminate);
     }
 
     public synchronized void setPercentageOfPairings(final double percentageOfPairings) {
