@@ -47,7 +47,7 @@ public class PopulationImpl implements Population {
             final boolean ac = individuals.add(individual);
             if (ac) {
                 if (log.isDebugEnabled()) {
-                    log.debug("added " + individual);
+                    // log.debug("added " + individual);
                 }
                 individual.triggerCalculation();
             } else {
@@ -112,12 +112,32 @@ public class PopulationImpl implements Population {
     }
 
     @Override
+    public synchronized double getAverageFitness() {
+        double result = 0;
+        for (Individual i : getIndividuals()) {
+            result += i.getFitness();
+        }
+        return result / getSize();
+    }
+
+    @Override
     public synchronized List<Individual> getIndividuals() {
         if (UtilCollection.nullOrEmpty(individuals)) {
             return Collections.emptyList();
         }
         final List<Individual> result = new ArrayList<Individual>(individuals);
         Collections.sort(result);
+        return result;
+    }
+
+    @Override
+    public synchronized double getMaxFitness() {
+        double result = Double.MIN_VALUE;
+        for (Individual i : getIndividuals()) {
+            if (i.getFitness() > result) {
+                result = i.getFitness();
+            }
+        }
         return result;
     }
 
@@ -149,11 +169,13 @@ public class PopulationImpl implements Population {
     }
 
     @Override
-    public synchronized void trim(final int newSize) {
+    public synchronized Collection<Individual> trim(final int newSize) {
         if (getSize() < newSize) {
-            return;
+            return Collections.emptyList();
         }
-        individuals = new LinkedHashSet<Individual>(getIndividuals().subList(0, newSize));
+        List<Individual> indis = getIndividuals();
+        individuals = new LinkedHashSet<Individual>(indis.subList(0, newSize));
+        return new ArrayList<Individual>(indis.subList(newSize, indis.size()));
     }
 
 }

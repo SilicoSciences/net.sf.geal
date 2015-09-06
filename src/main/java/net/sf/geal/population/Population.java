@@ -27,6 +27,10 @@ public interface Population extends Iterable<Individual> {
 
     Population getSubPopulation(int size);
 
-    void trim(int newSize);
+    Collection<Individual> trim(int newSize);
+
+    double getAverageFitness();
+
+    double getMaxFitness();
 
 }
