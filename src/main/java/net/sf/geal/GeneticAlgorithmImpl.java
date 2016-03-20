@@ -85,7 +85,7 @@ public class GeneticAlgorithmImpl implements GeneticAlgorithm {
 
     private boolean checkRun() {
         for (final TerminatorEvolution t : getTerminators()) {
-            if (t.visit(this)) {
+            if (t.filter(this)) {
                 if (log.isInfoEnabled()) {
                     log.info(t + " requested termination");
                 }

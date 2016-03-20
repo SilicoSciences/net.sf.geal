@@ -5,7 +5,7 @@ import net.sf.geal.GeneticAlgorithm;
 public class TerminatorPopulationSize extends TerminatorAbstract {
 
 	@Override
-	public synchronized Boolean visit(final GeneticAlgorithm element) {
+	public synchronized boolean filter(final GeneticAlgorithm element) {
 		if (!isEnabled()) {
 			return false;
 		}

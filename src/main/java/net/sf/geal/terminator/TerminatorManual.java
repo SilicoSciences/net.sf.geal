@@ -43,7 +43,7 @@ public class TerminatorManual extends TerminatorAbstract implements ProgressMoni
 	}
 
 	@Override
-	public synchronized Boolean visit(final GeneticAlgorithm element) {
+	public synchronized boolean filter(final GeneticAlgorithm element) {
 		if (!isEnabled()) {
 			return false;
 		}

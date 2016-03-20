@@ -24,7 +24,7 @@ public class TerminatorGenerations extends TerminatorAbstract {
 	}
 
 	@Override
-	public Boolean visit(final GeneticAlgorithm element) {
+	public boolean filter(final GeneticAlgorithm element) {
 		if (!isEnabled()) {
 			return false;
 		}
